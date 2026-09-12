@@ -55,32 +55,6 @@
  *
  * ===============================================================
 
-# Haskell
-cabal build; cabal run topos-demo; cabal test
-
-# ASP (clingo)
-clingo prolog/state_machine.lp
-clingo prolog/timing.lp
-clingo prolog/pipeline.lp
-
-# Datalog (Souffle)
-souffle datalog/braid_axioms.dl -D -
-
-# NESL
-nesl -r yb_invariance_demo nesl/topos.nesl
-
-# Dataflow
-ts-node dataflow/topos.df
-
-# Liquid Haskell（需 z3）
-liquid src/Topos/KauffmanKhovanov.hs
-liquid src/Topos/KhovanovDifferential.hs
-liquid src/Topos/TQFT/Cobordism.hs
-liquid src/Topos/BarNatan/DottedCobordism.hs
-liquid src/Topos/TQFT/Functor.hs
-```
-
----
 
 ## 節點清單（Node Manifest）— 每個節點皆可追溯至 Covenant
 

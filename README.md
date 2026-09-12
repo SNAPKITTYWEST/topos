@@ -87,7 +87,7 @@
 Maps ENKI's stochastic quantum physics layer to a **discrete, deterministic algebraic domain** — a jump-table FSA + braid algebra + polynomial invariants — so classical control logic can be formally verified against poisoning / decoherence.
 
 
-## Quickstart — Flowcharts (not slop)
+## Quickstart — Flowcharts 
 
 > **From this point down — flowcharts, not slop.** Each stage is a deterministic transition with plasma-gate entropy ≤0.20 and `τ_poison` gating — runnable via the commands embedded in the charts.
 

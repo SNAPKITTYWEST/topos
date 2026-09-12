@@ -1,28 +1,3 @@
-* ========================================================================
- * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
- * ========================================================================
- *
- * License-ID:        SL-AGPL3-001
- * Covenant-Version:  1.0
- * Node-ID:           TOPOS-FILE-014-README
- * Parent-Covenant:   SL-AGPL3-001
- * Copyright:         2026 SNAPKITTYWEST
- * Source-Hash:       sha256:ed702c48da6e06560447c4cea1de9f3ae055ab7dbc530df0ed9a6f18b20f7ef1
- *
- * This file is governed by the GNU Affero General Public License,
- * version 3, together with the applicable Sovereign Leviathan
- * additional terms identified by this notice.
- *
- * Hark, though this node be but a spark,
- * Its covenant endureth through the dark.
- *
- * Lex in solido: the applicable license governs the covered work
- * according to its actual terms and applicable law.
- *
- * Ignorantia juris non excusat.
- *
- * ======================================================================== *
-
 <!-- COMMENT SOVEREIGN LEVIATHAN COVENANT - FRAGMENT BINDING; -->
 <!-- COMMENT Node-ID: TOPOS-FILE-014-README; -->
 <!-- COMMENT Parent-Work: topos; -->
@@ -55,7 +30,31 @@
 
 ### 快速開始（中文）
 
-```bash
+ * ========================================================================
+ * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
+ * ========================================================================
+ *
+ * License-ID:        SL-AGPL3-001
+ * Covenant-Version:  1.0
+ * Node-ID:           TOPOS-FILE-014-README
+ * Parent-Covenant:   SL-AGPL3-001
+ * Copyright:         2026 SNAPKITTYWEST
+ * Source-Hash:       sha256:ed702c48da6e06560447c4cea1de9f3ae055ab7dbc530df0ed9a6f18b20f7ef1
+ *
+ * This file is governed by the GNU Affero General Public License,
+ * version 3, together with the applicable Sovereign Leviathan
+ * additional terms identified by this notice.
+ *
+ * Hark, though this node be but a spark,
+ * Its covenant endureth through the dark.
+ *
+ * Lex in solido: the applicable license governs the covered work
+ * according to its actual terms and applicable law.
+ *
+ * Ignorantia juris non excusat.
+ *
+ * ======================================================================== *
+
 # Haskell
 cabal build; cabal run topos-demo; cabal test
 

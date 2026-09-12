@@ -1,3 +1,28 @@
+/* ========================================================================
+ * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
+ * ========================================================================
+ *
+ * License-ID:        SL-AGPL3-001
+ * Covenant-Version:  1.0
+ * Node-ID:           TOPOS-FILE-014-README
+ * Parent-Covenant:   SL-AGPL3-001
+ * Copyright:         2026 SNAPKITTYWEST
+ * Source-Hash:       sha256:2b599421b66aaf421982711a66733ac590ea765f7df9f05a873e98f768f817a2
+ *
+ * This file is governed by the GNU Affero General Public License,
+ * version 3, together with the applicable Sovereign Leviathan
+ * additional terms identified by this notice.
+ *
+ * Hark, though this node be but a spark,
+ * Its covenant endureth through the dark.
+ *
+ * Lex in solido: the applicable license governs the covered work
+ * according to its actual terms and applicable law.
+ *
+ * Ignorantia juris non excusat.
+ *
+ * ======================================================================== */
+
 <!-- COMMENT SOVEREIGN LEVIATHAN COVENANT - FRAGMENT BINDING; -->
 <!-- COMMENT Node-ID: TOPOS-FILE-014-README; -->
 <!-- COMMENT Parent-Work: topos; -->
@@ -383,6 +408,11 @@ The jump-table reveals: **topological protection ≠ structural immunity**. It l
 
 ## License
 
+**Sovereign Leviathan Covenant — SL-AGPL3-001 / MGPLv3** (AGPLv3 + Sovereign Leviathan additional terms, England & Wales) — see `LICENSE`.
+
+Each file carries `/* SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING */` with `Node-ID`, `Source-Hash`, `License-ID: SL-AGPL3-001`, `Covenant-Version: 1.0` — see `docs/NODE_MANIFEST.json` and `docs/PROVENANCE.md`.
+
+Governing law: England and Wales. English controlling; العربية and 中文 co-equal.
 
 ## Citation
 

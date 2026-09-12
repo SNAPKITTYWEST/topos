@@ -1,35 +1,27 @@
--- COMMENT SOVEREIGN LEVIATHAN COVENANT - FRAGMENT BINDING;
--- COMMENT Node-ID: TOPOS-FILE-006-TQFT-Functor;
--- COMMENT Parent-Work: topos;
--- COMMENT Parent-Covenant: SL-AGPL3-001;
--- COMMENT Copyright: 2026 SNAPKITTYWEST;
--- COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
--- COMMENT Covenant-Version: 1.0;
--- COMMENT Source-Hash: sha256:367bc1e6b856d4e86a3586e818ebaf2e432c7ebf8c6c0195ebb1960ea8229d7c;
--- COMMENT Hash-Scope: source before generated license headers, UTF-8 LF;
--- COMMENT Creation-Date: 2026-09-12 (provenance record);
--- COMMENT Modification-Record: added license and node headers only;
--- COMMENT Verification-Record: text preservation checked, compilation not verified;
--- COMMENT Governed by GNU Affero General Public License version 3;
--- COMMENT together with applicable Sovereign Leviathan additional terms;
--- COMMENT AGPLv3 terms remain authoritative where additional terms do not validly apply;
--- COMMENT See LICENSE and docs/PROVENANCE.md;
--- COMMENT 
--- COMMENT ===========================================================;
--- COMMENT SOVEREIGN NODE KEY: TOPOS-FILE-006-TQFT-Functor-BLK-001-001-1;
--- COMMENT Parent-ID: TOPOS-FILE-006-TQFT-Functor;
--- COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
--- COMMENT Covenant-Version: 1.0;
--- COMMENT Copyright: 2026 SNAPKITTYWEST;
--- COMMENT License-Location: LICENSE;
--- COMMENT Provenance: docs/NODE_MANIFEST.json;
--- COMMENT BLOCK 001;
--- COMMENT Component: Functor.hs;
--- COMMENT Purpose: Functor F:Cob→Vect, homology, LES/spectral;
--- COMMENT Inputs: varies;
--- COMMENT Outputs: varies;
--- COMMENT ===========================================================;
--- COMMENT 
+/* ========================================================================
+ * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
+ * ========================================================================
+ *
+ * License-ID:        SL-AGPL3-001
+ * Covenant-Version:  1.0
+ * Node-ID:           TOPOS-FILE-006-TQFT-Functor
+ * Parent-Covenant:   SL-AGPL3-001
+ * Copyright:         2026 SNAPKITTYWEST
+ * Source-Hash:       sha256:367bc1e6b856d4e86a3586e818ebaf2e432c7ebf8c6c0195ebb1960ea8229d7c
+ *
+ * This file is governed by the GNU Affero General Public License,
+ * version 3, together with the applicable Sovereign Leviathan
+ * additional terms identified by this notice.
+ *
+ * Hark, though this node be but a spark,
+ * Its covenant endureth through the dark.
+ *
+ * Lex in solido: the applicable license governs the covered work
+ * according to its actual terms and applicable law.
+ *
+ * Ignorantia juris non excusat.
+ *
+ * ======================================================================== */
 {-@ LIQUID "--reflection" @-}
 {-@ LIQUID "--ple" @-}
 {-@ LIQUID "--no-termination" @-}

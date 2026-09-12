@@ -1,35 +1,27 @@
--- COMMENT SOVEREIGN LEVIATHAN COVENANT - FRAGMENT BINDING;
--- COMMENT Node-ID: TOPOS-FILE-005-BarNatan-DottedCobordism;
--- COMMENT Parent-Work: topos;
--- COMMENT Parent-Covenant: SL-AGPL3-001;
--- COMMENT Copyright: 2026 SNAPKITTYWEST;
--- COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
--- COMMENT Covenant-Version: 1.0;
--- COMMENT Source-Hash: sha256:2036d93295268ea14931c6628314384446ab9c1091f33f7801a3b9986bf7a029;
--- COMMENT Hash-Scope: source before generated license headers, UTF-8 LF;
--- COMMENT Creation-Date: 2026-09-12 (provenance record);
--- COMMENT Modification-Record: added license and node headers only;
--- COMMENT Verification-Record: text preservation checked, compilation not verified;
--- COMMENT Governed by GNU Affero General Public License version 3;
--- COMMENT together with applicable Sovereign Leviathan additional terms;
--- COMMENT AGPLv3 terms remain authoritative where additional terms do not validly apply;
--- COMMENT See LICENSE and docs/PROVENANCE.md;
--- COMMENT 
--- COMMENT ===========================================================;
--- COMMENT SOVEREIGN NODE KEY: TOPOS-FILE-005-BarNatan-DottedCobordism-BLK-001-001-1;
--- COMMENT Parent-ID: TOPOS-FILE-005-BarNatan-DottedCobordism;
--- COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
--- COMMENT Covenant-Version: 1.0;
--- COMMENT Copyright: 2026 SNAPKITTYWEST;
--- COMMENT License-Location: LICENSE;
--- COMMENT Provenance: docs/NODE_MANIFEST.json;
--- COMMENT BLOCK 001;
--- COMMENT Component: DottedCobordism.hs;
--- COMMENT Purpose: Bar-Natan dotted cobordism, BN1-6, matrixOf;
--- COMMENT Inputs: varies;
--- COMMENT Outputs: varies;
--- COMMENT ===========================================================;
--- COMMENT 
+/* ========================================================================
+ * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
+ * ========================================================================
+ *
+ * License-ID:        SL-AGPL3-001
+ * Covenant-Version:  1.0
+ * Node-ID:           TOPOS-FILE-005-BarNatan-DottedCobordism
+ * Parent-Covenant:   SL-AGPL3-001
+ * Copyright:         2026 SNAPKITTYWEST
+ * Source-Hash:       sha256:2036d93295268ea14931c6628314384446ab9c1091f33f7801a3b9986bf7a029
+ *
+ * This file is governed by the GNU Affero General Public License,
+ * version 3, together with the applicable Sovereign Leviathan
+ * additional terms identified by this notice.
+ *
+ * Hark, though this node be but a spark,
+ * Its covenant endureth through the dark.
+ *
+ * Lex in solido: the applicable license governs the covered work
+ * according to its actual terms and applicable law.
+ *
+ * Ignorantia juris non excusat.
+ *
+ * ======================================================================== */
 {-@ LIQUID "--reflection" @-}
 {-@ LIQUID "--ple" @-}
 {-@ LIQUID "--no-termination" @-}

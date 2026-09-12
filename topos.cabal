@@ -1,35 +1,27 @@
--- COMMENT SOVEREIGN LEVIATHAN COVENANT - FRAGMENT BINDING;
--- COMMENT Node-ID: TOPOS-FILE-015-Cabal;
--- COMMENT Parent-Work: topos;
--- COMMENT Parent-Covenant: SL-AGPL3-001;
--- COMMENT Copyright: 2026 SNAPKITTYWEST;
--- COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
--- COMMENT Covenant-Version: 1.0;
--- COMMENT Source-Hash: sha256:86e850b57f145b7287abb42746b230756c929035d00f56f085a78ce37f6965db;
--- COMMENT Hash-Scope: source before generated license headers, UTF-8 LF;
--- COMMENT Creation-Date: 2026-09-12 (provenance record);
--- COMMENT Modification-Record: added license and node headers only;
--- COMMENT Verification-Record: text preservation checked, compilation not verified;
--- COMMENT Governed by GNU Affero General Public License version 3;
--- COMMENT together with applicable Sovereign Leviathan additional terms;
--- COMMENT AGPLv3 terms remain authoritative where additional terms do not validly apply;
--- COMMENT See LICENSE and docs/PROVENANCE.md;
--- COMMENT 
--- COMMENT ===========================================================;
--- COMMENT SOVEREIGN NODE KEY: TOPOS-FILE-015-Cabal-BLK-001-001-1;
--- COMMENT Parent-ID: TOPOS-FILE-015-Cabal;
--- COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
--- COMMENT Covenant-Version: 1.0;
--- COMMENT Copyright: 2026 SNAPKITTYWEST;
--- COMMENT License-Location: LICENSE;
--- COMMENT Provenance: docs/NODE_MANIFEST.json;
--- COMMENT BLOCK 001;
--- COMMENT Component: topos.cabal;
--- COMMENT Purpose: cabal manifest, 6 exposed modules;
--- COMMENT Inputs: varies;
--- COMMENT Outputs: varies;
--- COMMENT ===========================================================;
--- COMMENT 
+/* ========================================================================
+ * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
+ * ========================================================================
+ *
+ * License-ID:        SL-AGPL3-001
+ * Covenant-Version:  1.0
+ * Node-ID:           TOPOS-FILE-015-Cabal
+ * Parent-Covenant:   SL-AGPL3-001
+ * Copyright:         2026 SNAPKITTYWEST
+ * Source-Hash:       sha256:8119972750b0e4806ebd0644a68b493a54ae6e87687f5cf0ea740339e5d378bf
+ *
+ * This file is governed by the GNU Affero General Public License,
+ * version 3, together with the applicable Sovereign Leviathan
+ * additional terms identified by this notice.
+ *
+ * Hark, though this node be but a spark,
+ * Its covenant endureth through the dark.
+ *
+ * Lex in solido: the applicable license governs the covered work
+ * according to its actual terms and applicable law.
+ *
+ * Ignorantia juris non excusat.
+ *
+ * ======================================================================== */
 cabal-version:      3.0
 name:               topos
 version:            0.1.0.0
@@ -48,8 +40,10 @@ description:
   * TQFT Cobordism double-layer (Frobenius A=Z[X]/X^2, Bar-Natan dotted calculus, d^2=0, categorification)
   * Bar-Natan dotted cobordism RAW DOUBLE-DOUBLE (src/tgt, BN1-BN6, hcomp/vcomp, matrixOf)
   * TQFT Functor F:Cob->Vect_Z (F_id/F_comp, dTQFT, homology, inducedHom, SES/spectral sequence)
-license:            MIT
+license:            AGPL-3.0-only
 license-file:       LICENSE
+-- Sovereign-Leviathan-Covenant: SL-AGPL3-001 / MGPLv3 (AGPLv3 + additional Sovereign terms)
+-- Jurisdiction: England and Wales — see LICENSE
 author:             Hilbert Parr / ENKI_PHYSICS_TO_ALGEBRAIC_MAPPING
 maintainer:         topos@sovereign.local
 category:           Math, Physics, Formal Methods

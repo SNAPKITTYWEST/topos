@@ -27,6 +27,7 @@ SL-017	Severability
 SL-018	Governing Law
 SL-019	Jurisdiction
 SL-020	Language and Interpretation
+
 Preamble — The Sovereign Covenant
 Hark! Ye who seek to bind this sovereign code,
 And reap the harvest of a builder's toil,
@@ -138,6 +139,7 @@ Copyright / contractual remedies preserved
 Injunctive / monetary / other remedies
        ↓
 Jurisdiction: England and Wales
+
 VII. Reinstatement — SL-014
 Toute réintégration des droits se fera selon les mécanismes de la licence applicable.
 
@@ -243,6 +245,7 @@ Node Provenance Schema
         <created>...</created>
     </provenance>
 </node>
+
 XIV. The Mutated General Public License v3 (MGPLv3)
 Full Name: MUTATED GENERAL PUBLIC LICENSE v3
 Short Name: MGPLv3

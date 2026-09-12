@@ -1,35 +1,27 @@
-<!-- COMMENT SOVEREIGN LEVIATHAN COVENANT - FRAGMENT BINDING; -->
-<!-- COMMENT Node-ID: TOPOS-FILE-016-Architecture; -->
-<!-- COMMENT Parent-Work: topos; -->
-<!-- COMMENT Parent-Covenant: SL-AGPL3-001; -->
-<!-- COMMENT Copyright: 2026 SNAPKITTYWEST; -->
-<!-- COMMENT License-ID: SL-AGPL3-001 / MGPLv3; -->
-<!-- COMMENT Covenant-Version: 1.0; -->
-<!-- COMMENT Source-Hash: sha256:18f94c97566beb85fa660f7751afc4ab47542c703827538a3e3ed1247f70cd60; -->
-<!-- COMMENT Hash-Scope: source before generated license headers, UTF-8 LF; -->
-<!-- COMMENT Creation-Date: 2026-09-12 (provenance record); -->
-<!-- COMMENT Modification-Record: added license and node headers only; -->
-<!-- COMMENT Verification-Record: text preservation checked, compilation not verified; -->
-<!-- COMMENT Governed by GNU Affero General Public License version 3; -->
-<!-- COMMENT together with applicable Sovereign Leviathan additional terms; -->
-<!-- COMMENT AGPLv3 terms remain authoritative where additional terms do not validly apply; -->
-<!-- COMMENT See LICENSE and docs/PROVENANCE.md; -->
-<!-- COMMENT  -->
-<!-- COMMENT ===========================================================; -->
-<!-- COMMENT SOVEREIGN NODE KEY: TOPOS-FILE-016-Architecture-BLK-001-001-1; -->
-<!-- COMMENT Parent-ID: TOPOS-FILE-016-Architecture; -->
-<!-- COMMENT License-ID: SL-AGPL3-001 / MGPLv3; -->
-<!-- COMMENT Covenant-Version: 1.0; -->
-<!-- COMMENT Copyright: 2026 SNAPKITTYWEST; -->
-<!-- COMMENT License-Location: LICENSE; -->
-<!-- COMMENT Provenance: docs/NODE_MANIFEST.json; -->
-<!-- COMMENT BLOCK 001; -->
-<!-- COMMENT Component: architecture.md; -->
-<!-- COMMENT Purpose: architecture 10-way YB equivalence; -->
-<!-- COMMENT Inputs: varies; -->
-<!-- COMMENT Outputs: varies; -->
-<!-- COMMENT ===========================================================; -->
-<!-- COMMENT  -->
+/* ========================================================================
+ * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
+ * ========================================================================
+ *
+ * License-ID:        SL-AGPL3-001
+ * Covenant-Version:  1.0
+ * Node-ID:           TOPOS-FILE-016-Architecture
+ * Parent-Covenant:   SL-AGPL3-001
+ * Copyright:         2026 SNAPKITTYWEST
+ * Source-Hash:       sha256:99f0c72000ec2a0b3e2e8d3b8705ebfcf0257def5f112c6c0f10828e8e0d48d0
+ *
+ * This file is governed by the GNU Affero General Public License,
+ * version 3, together with the applicable Sovereign Leviathan
+ * additional terms identified by this notice.
+ *
+ * Hark, though this node be but a spark,
+ * Its covenant endureth through the dark.
+ *
+ * Lex in solido: the applicable license governs the covered work
+ * according to its actual terms and applicable law.
+ *
+ * Ignorantia juris non excusat.
+ *
+ * ======================================================================== */
 # Architecture — Sovereign Logic Escape
 
 ## 1. From Physics to Algebra

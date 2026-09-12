@@ -1,35 +1,27 @@
-% COMMENT SOVEREIGN LEVIATHAN COVENANT - FRAGMENT BINDING;
-% COMMENT Node-ID: TOPOS-FILE-017-Pipeline;
-% COMMENT Parent-Work: topos;
-% COMMENT Parent-Covenant: SL-AGPL3-001;
-% COMMENT Copyright: 2026 SNAPKITTYWEST;
-% COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
-% COMMENT Covenant-Version: 1.0;
-% COMMENT Source-Hash: sha256:c10eef0d7da483dfb38dfac8a96d2388fdee2ff4b1f57106384d74520ff700e1;
-% COMMENT Hash-Scope: source before generated license headers, UTF-8 LF;
-% COMMENT Creation-Date: 2026-09-12 (provenance record);
-% COMMENT Modification-Record: added license and node headers only;
-% COMMENT Verification-Record: text preservation checked, compilation not verified;
-% COMMENT Governed by GNU Affero General Public License version 3;
-% COMMENT together with applicable Sovereign Leviathan additional terms;
-% COMMENT AGPLv3 terms remain authoritative where additional terms do not validly apply;
-% COMMENT See LICENSE and docs/PROVENANCE.md;
-% COMMENT 
-% COMMENT ===========================================================;
-% COMMENT SOVEREIGN NODE KEY: TOPOS-FILE-017-Pipeline-BLK-001-001-1;
-% COMMENT Parent-ID: TOPOS-FILE-017-Pipeline;
-% COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
-% COMMENT Covenant-Version: 1.0;
-% COMMENT Copyright: 2026 SNAPKITTYWEST;
-% COMMENT License-Location: LICENSE;
-% COMMENT Provenance: docs/NODE_MANIFEST.json;
-% COMMENT BLOCK 001;
-% COMMENT Component: pipeline.lp;
-% COMMENT Purpose: TOPOS compilation pipeline deterministic state transitions, entropy-bounded, tau_poison-gated;
-% COMMENT Inputs: varies;
-% COMMENT Outputs: varies;
-% COMMENT ===========================================================;
-% COMMENT 
+/* ========================================================================
+ * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
+ * ========================================================================
+ *
+ * License-ID:        SL-AGPL3-001
+ * Covenant-Version:  1.0
+ * Node-ID:           TOPOS-FILE-017-Pipeline
+ * Parent-Covenant:   SL-AGPL3-001
+ * Copyright:         2026 SNAPKITTYWEST
+ * Source-Hash:       sha256:c10eef0d7da483dfb38dfac8a96d2388fdee2ff4b1f57106384d74520ff700e1
+ *
+ * This file is governed by the GNU Affero General Public License,
+ * version 3, together with the applicable Sovereign Leviathan
+ * additional terms identified by this notice.
+ *
+ * Hark, though this node be but a spark,
+ * Its covenant endureth through the dark.
+ *
+ * Lex in solido: the applicable license governs the covered work
+ * according to its actual terms and applicable law.
+ *
+ * Ignorantia juris non excusat.
+ *
+ * ======================================================================== */
 % =============================================================================
 % TOPOS COMPILATION PIPELINE: DETERMINISTIC STATE TRANSITIONS
 % PROJECT: TOPOS_FORMAL_VERIFICATION

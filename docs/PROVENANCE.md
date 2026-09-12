@@ -29,11 +29,11 @@ Each header records Node-ID, Parent-Work, License-ID, Source-Hash (SHA256 of pre
 | TOPOS-FILE-011-Dataflow | `dataflow/topos.df` | Dataflow array-parallel YB/Jones actors | `b25b8f2999582898…` |
 | TOPOS-FILE-012-Main | `app/Main.hs` | demo runner, writhe, Jones, YB demo | `e862678480134258…` |
 | TOPOS-FILE-013-Spec | `test/Spec.hs` | HUnit/QuickCheck tests, normalize idempotent | `0e5803eed612d8a3…` |
-| TOPOS-FILE-014-README | `README.md` | bilingual README, Chinese top, English rest, node links | `cd8b51679e414940…` |
-| TOPOS-FILE-015-Cabal | `topos.cabal` | cabal manifest, 6 exposed modules | `86e850b57f145b72…` |
-| TOPOS-FILE-016-Architecture | `docs/architecture.md` | architecture 10-way YB equivalence | `18f94c97566beb85…` |
+| TOPOS-FILE-014-README | `README.md` | bilingual README, Chinese top, English rest, node links | `2b599421b66aaf42…` |
+| TOPOS-FILE-015-Cabal | `topos.cabal` | cabal manifest, 6 exposed modules | `8119972750b0e480…` |
+| TOPOS-FILE-016-Architecture | `docs/architecture.md` | architecture 10-way YB equivalence | `99f0c72000ec2a0b…` |
 
-| TOPOS-FILE-017-Pipeline | `prolog/pipeline.lp` | TOPOS compilation pipeline deterministic state transitions, entropy-bounded, tau_poison-gated | `34c5dcbd9a8d1fd9…` |
+| TOPOS-FILE-017-Pipeline | `prolog/pipeline.lp` | TOPOS compilation pipeline deterministic state transitions, entropy-bounded, tau_poison-gated | `c10eef0d7da483df…` |
 
 ## Verification
 

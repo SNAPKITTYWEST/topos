@@ -168,13 +168,7 @@ graph LR
   D1[braid_axioms.dl<br/>B_n: far-commute/YB/inverse] --> D2[souffle<br/>saturation]
   D2 --> D3[equiv lhs rhs<br/>σ₁σ₂σ₁ ≡ σ₂σ₁σ₂]
   D3 --> D4[YB key axiom<br/>equiv_word w_lhs w_rhs]
-```
 
-```bash
-souffle datalog/braid_axioms.dl -D -
-# souffle --output equiv --program braid_axioms.dl
-# ?- equiv("lhs","rhs").  # → true
-```
 
 ### 4. NESL — `nesl/topos.nesl` (nested parallel)
 

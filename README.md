@@ -162,22 +162,6 @@ clingo prolog/pipeline.lp        # pipeline stage validation + #minimize
 ```
 
 
-
-### 3. NESL — `nesl/topos.nesl` (nested parallel)
-
-```mermaid
-graph TD
-  N1[topos.nesl<br/>Strand=int<br/>Laurent=[(exp,coeff)]] --> N2[is_yb_window / yb_rewrite]
-  N2 --> N3[apply_yb_once<br/>sliding window]
-  N3 --> N4[normalize_yb<br/>fixpoint]
-  N4 --> N5[bracket_word<br/>reduce mul_laurent]
-  N5 --> N6[batch_jones<br/>yb_invariance_demo<br/>lhs vs rhs]
-
-```bash
-nesl -r yb_invariance_demo nesl/topos.nesl  # → (j_lhs, j_rhs, true)
-nesl -r invariance_suite nesl/topos.nesl
-```
-
 ### 4. Dataflow — `dataflow/topos.df` (array/stream)
 
 ```mermaid

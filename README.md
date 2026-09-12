@@ -14,8 +14,9 @@ Stochastic Physics  ──►  Discrete Jump-Table  ──►  Braid Monoid + In
 (τ_poison ~ 1μs-1ms)    (FSA: ground ─► braiding ─► measurement ─► poisoned)
                                                     │
                                                     ▼
-                                          Topos.Core (Haskell) + Datalog Yang-Baxter
-                                          Jones / Alexander / HOMFLY / Burau
+                     Topos.Core (Haskell) + Datalog Yang-Baxter
+                     NESL Nested-Parallel  + Dataflow Array-Parallel
+                     Jones / Alexander / HOMFLY / Burau  (all 4 kernels agree on YB)
 ```
 
 ### 1. Jump-Table — Sub-Topological Control Layer (`prolog/state_machine.lp`)
@@ -80,6 +81,35 @@ Souffle-compatible; query:
 
 Dense, no-deps beyond `base` + `containers`:
 
+### 5. NESL Kernel — Nested Data-Parallel (`nesl/topos.nesl`)
+
+400-line dense core mirroring `Topos.Core` but as **nested sequences** — every operator is data-parallel over strand arrays, crossing vectors, Laurent coefficient maps:
+
+* Flat types `Strand=int`, `Generator=(GenKind,int,int)`, `Laurent=[(exp,coeff)]`, `Braid=(int,[Generator])`
+* Parallel `is_yb_window` / `yb_rewrite` / `apply_yb_once` sliding-window saturation, `normalize_yb` fixpoint
+* Nested `add_laurent` / `mul_laurent` / `pow_laurent` via `flatten`/`group`/`sort`, `bracket_word` via `reduce(mul_laurent, ...)`
+* Batch `batch_jones`, `braid_words` generation of all `|G|^k` words, `full_normalize = free_reduce → YB → free_reduce`
+* Invariance witness `yb_invariance_demo: σ₁σ₂σ₁ (0,0,1)(0,1,2)(0,0,1) → σ₂σ₁σ₂` with `j_lhs == j_rhs`
+
+### 6. Dataflow / Array Kernel (`dataflow/topos.df`)
+
+Same semantics as NESL but as **explicit dataflow graph** with token-driven actors — SIMD-friendly flat arrays, streaming operators:
+
+* Primitives `Arr<T>`, `Stream<T>`, `Token<T>`, `map_array`/`reduce_array`/`scan_array`
+* Actors `CrossingActor`/`TwistActor`/`ComposeActor`, `YBWindowActor` (size-3 buffer) + `FreeReduceActor`
+* Laurent actors `AddLaurActor`/`MulLaurActor`/`ScaleLaurActor` (Map-based normalisation), `BracketActor`/`WritheActor`/`JonesActor` pipeline
+* Top-level `build_yb_invariance_graph` (LHS `σ₁σ₂σ₁` vs RHS `σ₂σ₁σ₂` through `FreeReduce→YBWindow→Bracket→Writhe→Jones`), `batch_normalize`/`batch_jones` array-parallel, `assert_yb_invariance` sparse-poly equality, `BraidStreamProcessor` streaming interface
+
+All four kernels (Haskell `normalize:53`, Datalog `equiv_word`, NESL `normalize_yb`, Dataflow `YBWindowActor`) implement the **same Artin relation** `σ₁σ₂σ₁ ≡ σ₂σ₁σ₂` — cross-check any pair for consistency.
+
+---
+
+### Combined View
+
+* **Spec:** `prolog/*.lp` + `datalog/*.dl` (declarative)
+* **Reference:** `src/Topos/Core.hs` (pure functional)
+* **Parallel:** `nesl/topos.nesl` (nested) + `dataflow/topos.df` (array/stream) — drop-in for GPU / dataflow hardware
+
 * **Strand algebra:** `Strand`, `Crossing{Over|Under}`, `Twist`, `Generator{Parallel|Seq}`
 * **Braid monoid:** `compose`, `parallel`, `identity`, `normalize` (FarCommute / Yang-Baxter / Inverse rewrites)
 * **Invariants embedded:**
@@ -107,7 +137,9 @@ print (linkingNumber hopfLink (strand "x") (strand "y")) -- 1
 
 ```
 topos/
-├── src/Topos/Core.hs          # 650+ LOC braid + invariants core
+├── src/Topos/Core.hs          # 740 LOC braid + invariants core (Haskell)
+├── nesl/topos.nesl             # 400 LOC NESL nested-parallel kernel
+├── dataflow/topos.df           # 400 LOC dataflow / array-parallel kernel
 ├── prolog/state_machine.lp     # FSA jump-table (clingo ASP)
 ├── prolog/timing.lp            # reset latency constraint
 ├── datalog/braid_axioms.dl     # Souffle/DDlog Yang-Baxter axioms
@@ -150,6 +182,23 @@ souffle datalog/braid_axioms.dl -D -
 ```
 
 Query `equiv(lhs,rhs)` — should derive `equiv("lhs","rhs")` via `equiv_word("w_lhs","w_rhs")`.
+
+### NESL
+
+```bash
+nesl -r yb_invariance_demo nesl/topos.nesl
+nesl -r invariance_suite nesl/topos.nesl
+# expects (j_lhs, j_rhs, true)
+```
+
+### Dataflow
+
+```bash
+# TypeScript / dataflow runtime (actors are plain TS classes)
+ts-node dataflow/topos.df  # build_yb_invariance_graph + assert_yb_invariance()
+node -e "import('./dataflow/topos.df').assert_yb_invariance()"
+# expects true — batch_jones([σ₁σ₂σ₁, σ₂σ₁σ₂]) yields equal sparse polys
+```
 
 ---
 

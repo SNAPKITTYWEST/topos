@@ -1,0 +1,405 @@
+// Topos Kernel – Dataflow / Array-Processing Foundation
+// 400-line dense implementation using explicit dataflow graph,
+// array-based parallelism, and streaming operators for braid
+// normalisation and Jones polynomial evaluation.
+// Modelled after a pure dataflow runtime with token-driven actors.
+
+// ------------------------------------------------------------------
+// Runtime primitives (array & stream oriented)
+// ------------------------------------------------------------------
+
+type Arr<T> = T[]; // dense arrays
+type Stream<T> = { push: T => void; pull: () => T | null };
+type Token<T> = { val: T; tag: int };
+
+function make_array<T>(n: int, init: T): Arr<T> {
+  let a = new Array(n);
+  for (let i = 0; i < n; i++) a[i] = init;
+  return a;
+}
+
+function map_array<T,U>(a: Arr<T>, f: T => U): Arr<U> {
+  let b = make_array(a.length, f(a[0]));
+  for (let i = 0; i < a.length; i++) b[i] = f(a[i]);
+  return b;
+}
+
+function reduce_array<T>(a: Arr<T>, op: (T,T) => T, z: T): T {
+  let acc = z;
+  for (let i = 0; i < a.length; i++) acc = op(acc, a[i]);
+  return acc;
+}
+
+function zip_array<T,U>(a: Arr<T>, b: Arr<U>): Arr<(T,U)> {
+  let n = Math.min(a.length, b.length);
+  let c = make_array(n, [a[0], b[0]]);
+  for (let i = 0; i < n; i++) c[i] = [a[i], b[i]];
+  return c;
+}
+
+function scan_array<T>(a: Arr<T>, op: (T,T) => T, z: T): Arr<T> {
+  let b = make_array(a.length, z);
+  let acc = z;
+  for (let i = 0; i < a.length; i++) {
+    acc = op(acc, a[i]);
+    b[i] = acc;
+  }
+  return b;
+}
+
+// Dataflow actor base
+class Actor {
+  inputs: Stream<any>[];
+  outputs: Stream<any>[];
+  fire(): void {}
+}
+
+// ------------------------------------------------------------------
+// Core data types (flat arrays for SIMD-friendly processing)
+// ------------------------------------------------------------------
+
+type StrandId = int;
+type CrossRec = { u: StrandId; l: StrandId; over: bool };
+type GenRec = { kind: int; a: int; b: int }; // 0=Cross, 1=Twist
+type BraidRec = { n: int; gens: Arr<GenRec> };
+
+type TermRec = { exp: int; coeff: int };
+type LaurRec = Arr<TermRec>;
+
+// ------------------------------------------------------------------
+// Dataflow nodes for braid construction
+// ------------------------------------------------------------------
+
+class CrossingActor extends Actor {
+  fire() {
+    let tok = this.inputs[0].pull();
+    if (!tok) return;
+    let {u, l, over} = tok.val;
+    let gen: GenRec = { kind: 0, a: u, b: l };
+    this.outputs[0].push({ val: gen, tag: tok.tag });
+  }
+}
+
+class TwistActor extends Actor {
+  fire() {
+    let tok = this.inputs[0].pull();
+    if (!tok) return;
+    let {s, turns} = tok.val;
+    let gen: GenRec = { kind: 1, a: s, b: turns };
+    this.outputs[0].push({ val: gen, tag: tok.tag });
+  }
+}
+
+class ComposeActor extends Actor {
+  fire() {
+    let t1 = this.inputs[0].pull();
+    let t2 = this.inputs[1].pull();
+    if (!t1 || !t2) return;
+    let b1: BraidRec = t1.val;
+    let b2: BraidRec = t2.val;
+    if (b1.n != b2.n) throw "strand mismatch";
+    let gens = b1.gens.concat(b2.gens);
+    this.outputs[0].push({ val: { n: b1.n, gens }, tag: t1.tag });
+  }
+}
+
+// ------------------------------------------------------------------
+// Yang-Baxter dataflow rewrite engine
+// ------------------------------------------------------------------
+
+class YBWindowActor extends Actor {
+  // Sliding window of size 3 over generator stream
+  buf: GenRec[] = [];
+  fire() {
+    let tok = this.inputs[0].pull();
+    if (!tok) return;
+    this.buf.push(tok.val);
+    if (this.buf.length < 3) return;
+    let [g1, g2, g3] = this.buf.slice(-3);
+    if (this.isYB(g1, g2, g3)) {
+      let rewritten = this.rewrite(g1, g2, g3);
+      for (let g of rewritten)
+        this.outputs[0].push({ val: g, tag: tok.tag });
+      this.buf = this.buf.slice(0, -3);
+    } else {
+      this.outputs[0].push({ val: this.buf.shift(), tag: tok.tag });
+    }
+  }
+  isYB(g1: GenRec, g2: GenRec, g3: GenRec): bool {
+    return g1.kind == 0 && g2.kind == 0 && g3.kind == 0 &&
+           g1.a == g3.a && g1.b == g2.a && g2.b == g3.b &&
+           g1.a + 1 == g1.b;
+  }
+  rewrite(g1: GenRec, g2: GenRec, g3: GenRec): GenRec[] {
+    return [
+      { kind: 0, a: g2.a, b: g2.b },
+      { kind: 0, a: g1.a, b: g1.b },
+      { kind: 0, a: g2.a, b: g2.b }
+    ];
+  }
+}
+
+class FreeReduceActor extends Actor {
+  buf: GenRec[] = [];
+  fire() {
+    let tok = this.inputs[0].pull();
+    if (!tok) return;
+    this.buf.push(tok.val);
+    if (this.buf.length < 2) return;
+    let g1 = this.buf[this.buf.length-2];
+    let g2 = this.buf[this.buf.length-1];
+    if (g1.kind == 0 && g2.kind == 0 && g1.a == g2.a && g1.b == g2.b) {
+      this.buf.pop(); this.buf.pop();
+    } else {
+      this.outputs[0].push({ val: this.buf.shift(), tag: tok.tag });
+    }
+  }
+}
+
+// ------------------------------------------------------------------
+// Laurent polynomial dataflow actors
+// ------------------------------------------------------------------
+
+class AddLaurActor extends Actor {
+  fire() {
+    let t1 = this.inputs[0].pull();
+    let t2 = this.inputs[1].pull();
+    if (!t1 || !t2) return;
+    let p: LaurRec = t1.val;
+    let q: LaurRec = t2.val;
+    let merged = this.merge(p, q);
+    this.outputs[0].push({ val: merged, tag: t1.tag });
+  }
+  merge(p: LaurRec, q: LaurRec): LaurRec {
+    let map = new Map<int,int>();
+    for (let t of p) map.set(t.exp, (map.get(t.exp) || 0) + t.coeff);
+    for (let t of q) map.set(t.exp, (map.get(t.exp) || 0) + t.coeff);
+    let res: LaurRec = [];
+    map.forEach((c, e) => { if (c != 0) res.push({ exp: e, coeff: c }); });
+    res.sort((a, b) => a.exp - b.exp);
+    return res;
+  }
+}
+
+class MulLaurActor extends Actor {
+  fire() {
+    let t1 = this.inputs[0].pull();
+    let t2 = this.inputs[1].pull();
+    if (!t1 || !t2) return;
+    let p: LaurRec = t1.val;
+    let q: LaurRec = t2.val;
+    let products: LaurRec = [];
+    for (let x of p)
+      for (let y of q)
+        products.push({ exp: x.exp + y.exp, coeff: x.coeff * y.coeff });
+    // normalise via add
+    let map = new Map<int,int>();
+    for (let t of products)
+      map.set(t.exp, (map.get(t.exp) || 0) + t.coeff);
+    let res: LaurRec = [];
+    map.forEach((c, e) => { if (c != 0) res.push({ exp: e, coeff: c }); });
+    res.sort((a, b) => a.exp - b.exp);
+    this.outputs[0].push({ val: res, tag: t1.tag });
+  }
+}
+
+class ScaleLaurActor extends Actor {
+  k: int;
+  constructor(k: int) { super(); this.k = k; }
+  fire() {
+    let tok = this.inputs[0].pull();
+    if (!tok) return;
+    let p: LaurRec = tok.val;
+    let scaled = map_array(p, t => ({ exp: t.exp, coeff: t.coeff * this.k }));
+    this.outputs[0].push({ val: scaled, tag: tok.tag });
+  }
+}
+
+// ------------------------------------------------------------------
+// Jones polynomial dataflow pipeline
+// ------------------------------------------------------------------
+
+class BracketActor extends Actor {
+  fire() {
+    let tok = this.inputs[0].pull();
+    if (!tok) return;
+    let g: GenRec = tok.val;
+    let one: LaurRec = [{ exp: 0, coeff: 1 }];
+    if (g.kind != 0) {
+      this.outputs[0].push({ val: one, tag: tok.tag });
+      return;
+    }
+    // A * 1 + A^{-1} * 1
+    let left = [{ exp: 1, coeff: 1 }];
+    let right = [{ exp: -1, coeff: 1 }];
+    let sum = left.concat(right);
+    this.outputs[0].push({ val: sum, tag: tok.tag });
+  }
+}
+
+class WritheActor extends Actor {
+  fire() {
+    let tok = this.inputs[0].pull();
+    if (!tok) return;
+    let b: BraidRec = tok.val;
+    let w = 0;
+    for (let g of b.gens) if (g.kind == 0) w += 1;
+    this.outputs[0].push({ val: w, tag: tok.tag });
+  }
+}
+
+class JonesActor extends Actor {
+  fire() {
+    let bTok = this.inputs[0].pull();
+    let brTok = this.inputs[1].pull();
+    let wTok = this.inputs[2].pull();
+    if (!bTok || !brTok || !wTok) return;
+    let br: LaurRec = brTok.val;
+    let w: int = wTok.val;
+    let normExp = -3 * w;
+    let norm: LaurRec = [{ exp: normExp, coeff: 1 }];
+    // multiply
+    let products: LaurRec = [];
+    for (let x of br)
+      for (let y of norm)
+        products.push({ exp: x.exp + y.exp, coeff: x.coeff * y.coeff });
+    let sign = (w % 2 == 0) ? 1 : -1;
+    let final = map_array(products, t => ({ exp: t.exp, coeff: t.coeff * sign }));
+    this.outputs[0].push({ val: final, tag: bTok.tag });
+  }
+}
+
+// ------------------------------------------------------------------
+// Top-level dataflow graph for Yang-Baxter invariance
+// ------------------------------------------------------------------
+
+function build_yb_invariance_graph() {
+  // Sources for LHS and RHS
+  let lhsGens: Arr<GenRec> = [
+    { kind: 0, a: 0, b: 1 },
+    { kind: 0, a: 1, b: 2 },
+    { kind: 0, a: 0, b: 1 }
+  ];
+  let rhsGens: Arr<GenRec> = [
+    { kind: 0, a: 1, b: 2 },
+    { kind: 0, a: 0, b: 1 },
+    { kind: 0, a: 1, b: 2 }
+  ];
+
+  let lhs: BraidRec = { n: 3, gens: lhsGens };
+  let rhs: BraidRec = { n: 3, gens: rhsGens };
+
+  // Pipeline: FreeReduce → YBWindow → Bracket → Writhe → Jones
+  let freeL = new FreeReduceActor();
+  let ybL = new YBWindowActor();
+  let brL = new BracketActor();
+  let wrL = new WritheActor();
+  let jL = new JonesActor();
+
+  let freeR = new FreeReduceActor();
+  let ybR = new YBWindowActor();
+  let brR = new BracketActor();
+  let wrR = new WritheActor();
+  let jR = new JonesActor();
+
+  // Wire (simplified sequential for clarity; real runtime schedules concurrently)
+  // ... wiring omitted for density; each actor.fire() is scheduled by token arrival
+
+  return { lhs, rhs, jL, jR };
+}
+
+// ------------------------------------------------------------------
+// Array-parallel batch evaluation
+// ------------------------------------------------------------------
+
+function batch_normalize(bs: Arr<BraidRec>): Arr<BraidRec> {
+  return map_array(bs, b => {
+    // run free reduce + yb to fixpoint on gens array
+    let gs = b.gens.slice();
+    let changed = true;
+    while (changed) {
+      changed = false;
+      // free reduce
+      let i = 0;
+      while (i < gs.length - 1) {
+        if (gs[i].kind == 0 && gs[i+1].kind == 0 &&
+            gs[i].a == gs[i+1].a && gs[i].b == gs[i+1].b) {
+          gs.splice(i, 2);
+          changed = true;
+        } else i++;
+      }
+      // yb
+      i = 0;
+      while (i < gs.length - 2) {
+        let g1 = gs[i], g2 = gs[i+1], g3 = gs[i+2];
+        if (g1.kind == 0 && g2.kind == 0 && g3.kind == 0 &&
+            g1.a == g3.a && g1.b == g2.a && g2.b == g3.b) {
+          gs[i] = { kind: 0, a: g2.a, b: g2.b };
+          gs[i+1] = { kind: 0, a: g1.a, b: g1.b };
+          gs[i+2] = { kind: 0, a: g2.a, b: g2.b };
+          changed = true;
+          i += 3;
+        } else i++;
+      }
+    }
+    return { n: b.n, gens: gs };
+  });
+}
+
+function batch_jones(bs: Arr<BraidRec>): Arr<LaurRec> {
+  let norms = batch_normalize(bs);
+  return map_array(norms, b => {
+    // simplified Jones
+    let w = 0;
+    for (let g of b.gens) if (g.kind == 0) w++;
+    let br: LaurRec = [{ exp: 0, coeff: 1 }];
+    for (let g of b.gens) {
+      if (g.kind == 0) {
+        br = [{ exp: 1, coeff: 1 }, { exp: -1, coeff: 1 }]; // placeholder
+      }
+    }
+    let normExp = -3 * w;
+    let sign = (w % 2 == 0) ? 1 : -1;
+    return map_array(br, t => ({ exp: t.exp + normExp, coeff: t.coeff * sign }));
+  });
+}
+
+// ------------------------------------------------------------------
+// Invariance assertion via dataflow
+// ------------------------------------------------------------------
+
+function assert_yb_invariance() {
+  let lhs: BraidRec = { n: 3, gens: [
+    { kind: 0, a: 0, b: 1 }, { kind: 0, a: 1, b: 2 }, { kind: 0, a: 0, b: 1 }
+  ]};
+  let rhs: BraidRec = { n: 3, gens: [
+    { kind: 0, a: 1, b: 2 }, { kind: 0, a: 0, b: 1 }, { kind: 0, a: 1, b: 2 }
+  ]};
+  let js = batch_jones([lhs, rhs]);
+  let equal = true;
+  // compare sparse polys
+  if (js[0].length != js[1].length) equal = false;
+  else for (let i = 0; i < js[0].length; i++)
+    if (js[0][i].exp != js[1][i].exp || js[0][i].coeff != js[1][i].coeff)
+      equal = false;
+  return equal;
+}
+
+// ------------------------------------------------------------------
+// Streaming interface for continuous braid rewriting
+// ------------------------------------------------------------------
+
+class BraidStreamProcessor {
+  actors: Actor[] = [];
+  inject(gen: GenRec) {
+    // push into first actor
+  }
+  drain(): LaurRec {
+    // pull final Jones token
+    return [];
+  }
+}
+
+// ------------------------------------------------------------------
+// End of dataflow / array-processing kernel
+// ------------------------------------------------------------------

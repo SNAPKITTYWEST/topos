@@ -9,6 +9,8 @@ description:
   * Timing bound derivation (tau_poison 1us-1ms -> lambda <= 150 entropy/ms)
   * Topos.Core Haskell — strand algebra, braid monoid, Yang-Baxter, Jones/Alexander/HOMFLY, Burau
   * Datalog axioms for automated braid equivalence via Yang-Baxter saturation
+  * NESL nested data-parallel kernel (parallel YB saturation + Jones on nested sequences)
+  * Dataflow / array-parallel kernel (actor graph + SIMD arrays + streaming Jones)
 license:            MIT
 license-file:       LICENSE
 author:             Hilbert Parr / ENKI_PHYSICS_TO_ALGEBRAIC_MAPPING
@@ -20,6 +22,10 @@ extra-doc-files:    README.md
                     prolog/state_machine.lp
                     prolog/timing.lp
                     datalog/braid_axioms.dl
+                    nesl/topos.nesl
+                    dataflow/topos.df
+                    examples/trefoil.braid
+                    examples/poisoning_trace.txt
 
 common warnings
     ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates

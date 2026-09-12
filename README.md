@@ -87,19 +87,6 @@
 
 Maps ENKI's stochastic quantum physics layer to a **discrete, deterministic algebraic domain** — a jump-table FSA + braid algebra + polynomial invariants — so classical control logic can be formally verified against poisoning / decoherence.
 
----
-
-## The Escape in One Picture
-
-```
-Stochastic Physics  ──►  Discrete Jump-Table  ──►  Braid Monoid + Invariants
-(τ_poison ~ 1μs-1ms)    (FSA: ground ─► braiding ─► measurement ─► poisoned)
-                                                    │
-                                                    ▼
-                     Topos.Core + Datalog (spec/ref)
-                     NESL + Dataflow (parallel YB/Jones)
-                     Liquid Kauffman/Khovanov + differentials (verified)
-                     TQFT Cobordism + Bar-Natan + Functor F:Cob→Vect (all 9 kernels agree on YB)
 
 ## Quickstart — Flowcharts (not slop)
 

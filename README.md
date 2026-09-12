@@ -383,7 +383,6 @@ The jump-table reveals: **topological protection ≠ structural immunity**. It l
 
 ## License
 
-MIT — see `LICENSE`.
 
 ## Citation
 

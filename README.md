@@ -161,16 +161,9 @@ clingo prolog/timing.lp          # valid_reset_sequence / unscalable(150)
 clingo prolog/pipeline.lp        # pipeline stage validation + #minimize
 ```
 
-### 3. Datalog — `datalog/braid_axioms.dl` (Souffle)
-
-```mermaid
-graph LR
-  D1[braid_axioms.dl<br/>B_n: far-commute/YB/inverse] --> D2[souffle<br/>saturation]
-  D2 --> D3[equiv lhs rhs<br/>σ₁σ₂σ₁ ≡ σ₂σ₁σ₂]
-  D3 --> D4[YB key axiom<br/>equiv_word w_lhs w_rhs]
 
 
-### 4. NESL — `nesl/topos.nesl` (nested parallel)
+### 3. NESL — `nesl/topos.nesl` (nested parallel)
 
 ```mermaid
 graph TD
@@ -179,14 +172,13 @@ graph TD
   N3 --> N4[normalize_yb<br/>fixpoint]
   N4 --> N5[bracket_word<br/>reduce mul_laurent]
   N5 --> N6[batch_jones<br/>yb_invariance_demo<br/>lhs vs rhs]
-```
 
 ```bash
 nesl -r yb_invariance_demo nesl/topos.nesl  # → (j_lhs, j_rhs, true)
 nesl -r invariance_suite nesl/topos.nesl
 ```
 
-### 5. Dataflow — `dataflow/topos.df` (array/stream)
+### 4. Dataflow — `dataflow/topos.df` (array/stream)
 
 ```mermaid
 graph LR

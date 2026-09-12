@@ -33,7 +33,6 @@
  * ===============================================================
  * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
  * ==============================================================
- *
  * License-ID:        SL-AGPL3-001
  * Covenant-Version:  1.0
  * Node-ID:           TOPOS-FILE-014-README
@@ -52,7 +51,6 @@
  * according to its actual terms and applicable law.
  *
  * Ignorantia juris non excusat.
- *
  * ===============================================================
 
 

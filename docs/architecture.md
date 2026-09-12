@@ -49,15 +49,17 @@ The predicate `unscalable/1` is the **formal specification** of the engineering 
 
 ### Equivalence across Kernels
 
-The same Artin relation `σ₁σ₂σ₁ ≡ σ₂σ₁σ₂` appears in **five** places — intentionally redundant for cross-verification:
+The same Artin relation `σ₁σ₂σ₁ ≡ σ₂σ₁σ₂` appears in **seven** places — intentionally redundant for cross-verification:
 
 1. `normalize` / `applyYangBaxter` (Haskell rewrite, `src/Topos/Core.hs:145`)
 2. `equiv_word("w_lhs","w_rhs")` (Datalog fact + rules, `datalog/braid_axioms.dl:48`)
 3. `Burau` representation (linear sanity check, `src/Topos/Core.hs:580`)
 4. `is_yb_window` / `yb_rewrite` / `normalize_yb` (NESL nested-parallel, `nesl/topos.nesl:85`)
 5. `YBWindowActor.isYB` / `batch_normalize` (Dataflow array-parallel, `dataflow/topos.df:65`)
+6. `kauffmanBracket lhsYB == rhsYB` / `jonesYB` (Liquid `KauffmanKhovanov.hs:183`)
+7. `dSquaredZero` + `differential` sign-cancellation (Liquid `KhovanovDifferential.hs:254`) — YB is the `d²=0` coherence condition
 
-All five must agree; `yb_invariance_demo` (NESL) and `assert_yb_invariance` (Dataflow) both witness `j(σ₁σ₂σ₁) == j(σ₂σ₁σ₂)` on sparse Laurent polys — identical to Haskell `jones lhs == jones rhs` and Datalog `equiv("lhs","rhs")`.
+All seven must agree; `yb_invariance_demo` (NESL), `assert_yb_invariance` (Dataflow), `bracketYB`/`jonesYB` (Liquid) all witness `j(σ₁σ₂σ₁) == j(σ₂σ₁σ₂)` on sparse Laurent polys — identical to Haskell `jones lhs == jones rhs` and Datalog `equiv("lhs","rhs")`.
 
 This N-way redundancy is intentional: a future Lean/F* backend will unify them as a certified kernel, with NESL/Dataflow as the GPU / streaming execution layer.
 
@@ -73,7 +75,14 @@ This N-way redundancy is intentional: a future Lean/F* backend will unify them a
 
 Both are drop-in replacements for the Haskell reference when targeting GPU (NESL `flatten` = GPU flatten) or dataflow hardware (actors = hardware PEs).
 
-## 6. Future Formalization Path
+## 6. Liquid Verification (Kauffman → Khovanov)
+
+* `KauffmanKhovanov.hs` reflection/PLE proves **bracket invariance under RII/RIII** (`bracketYB`), hence Jones via `A^{-3·writhe}` is a link invariant. The state-sum `kauffmanBracket = Σ_s A^{#A}·A^{-#A⁻¹}·δ^{circles-1}` `KauffmanKhovanov.hs:119` is the executable spec that `Topos.Core:jones` approximates with `Map`-based polys.
+* `eulerJones` `KauffmanKhovanov.hs:288` proves **Khovanov Euler characteristic = Jones** — the categorification is sound. `khovanovComplex` builds `2^{#crossings+k}` enhanced states with `(i,q)` gradings.
+* `KhovanovDifferential.hs` implements the **Frobenius TQFT** `m/delta` `KhovanovDifferential.hs:92` and signed `d` `KhovanovDifferential.hs:210`. `dSquaredZero` `KhovanovDifferential.hs:254` (`d(d ch)==[]`) is exactly the Yang-Baxter coherence (two orders of flipping two `0→1` bits cancel via `signOf`).
+* Together they certify that the NESL/Dataflow rewrites are not just string rewrites but **chain-homotopy equivalences** of Khovanov complexes.
+
+## 7. Future Formalization Path
 
 * Replace placeholder `ybRewrite` with a proper permutation of `Over/Under` and add `Reidemeister I` (`Tw` normalization).
 * Implement `parseSurface` as a Parsec/Megaparsec recursive descent for the `braid { ... }` syntax; generate both Haskell `Braid` and Datalog `word/2` facts from the same parse.

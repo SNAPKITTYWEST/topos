@@ -15,8 +15,8 @@ Stochastic Physics  ──►  Discrete Jump-Table  ──►  Braid Monoid + In
                                                     │
                                                     ▼
                      Topos.Core (Haskell) + Datalog Yang-Baxter
-                     NESL Nested-Parallel  + Dataflow Array-Parallel
-                     Jones / Alexander / HOMFLY / Burau  (all 4 kernels agree on YB)
+                     NESL + Dataflow (parallel YB/Jones)
+                     Liquid Kauffman/Khovanov (verified d²=0, bracketYB, eulerJones)  (all 6 kernels agree on YB)
 ```
 
 ### 1. Jump-Table — Sub-Topological Control Layer (`prolog/state_machine.lp`)
@@ -81,6 +81,18 @@ Souffle-compatible; query:
 
 Dense, no-deps beyond `base` + `containers`:
 
+* **Strand algebra:** `Strand`, `Crossing{Over|Under}`, `Twist`, `Generator{Parallel|Seq}`
+* **Braid monoid:** `compose`, `parallel`, `identity`, `normalize` (FarCommute / Yang-Baxter / Inverse rewrites)
+* **Invariants embedded:**
+  * **Jones** via Kauffman bracket + writhe normalization (`jones`, `measureJones`)
+  * **Alexander** via Fox calculus (`alexander`, `measureAlexander`)
+  * **HOMFLY** 2-variable (`homfly`, `measureHOMFLY`)
+  * **Burau** representation (`burau`, matrix over `Laurent`)
+* **Quantum embedding:** `Anyon{Fib|Ising|Custom}`, `Fusion`, `RMatrix`, `QuantumBraid`, `embedQuantum`
+* **Tangle calculus:** `Tangle`, `composeTangle`, `rationalTangle`, `genusEstimate`, `linkingNumber`
+* **Examples:** `trefoil`, `figureEight`, `hopfLink`, `cinquefoil`, `stevedore`, `pretzel`, `pureBraid3`, `sigma` generators, `parametricStrands`
+* **DSL surface:** `Stmt`, `Program`, `evalProgram`, `parseSurface` (stub for `braid { strand a,b,c; crossing(a,b,over); ... }`), `Classical{Let|If|While}`
+
 ### 5. NESL Kernel — Nested Data-Parallel (`nesl/topos.nesl`)
 
 400-line dense core mirroring `Topos.Core` but as **nested sequences** — every operator is data-parallel over strand arrays, crossing vectors, Laurent coefficient maps:
@@ -100,7 +112,28 @@ Same semantics as NESL but as **explicit dataflow graph** with token-driven acto
 * Laurent actors `AddLaurActor`/`MulLaurActor`/`ScaleLaurActor` (Map-based normalisation), `BracketActor`/`WritheActor`/`JonesActor` pipeline
 * Top-level `build_yb_invariance_graph` (LHS `σ₁σ₂σ₁` vs RHS `σ₂σ₁σ₂` through `FreeReduce→YBWindow→Bracket→Writhe→Jones`), `batch_normalize`/`batch_jones` array-parallel, `assert_yb_invariance` sparse-poly equality, `BraidStreamProcessor` streaming interface
 
-All four kernels (Haskell `normalize:53`, Datalog `equiv_word`, NESL `normalize_yb`, Dataflow `YBWindowActor`) implement the **same Artin relation** `σ₁σ₂σ₁ ≡ σ₂σ₁σ₂` — cross-check any pair for consistency.
+All six kernels (Haskell `normalize:53`, Datalog `equiv_word`, NESL `normalize_yb`, Dataflow `YBWindowActor`, Liquid `kauffmanBracket`, `differential`) implement the **same Artin relation** `σ₁σ₂σ₁ ≡ σ₂σ₁σ₂` — cross-check any pair for consistency.
+
+### 7. Liquid Haskell — Kauffman Bracket + Khovanov (`src/Topos/KauffmanKhovanov.hs`)
+
+500-line formalization with `--reflection`/`--ple` — refinement types discharged by PLE:
+
+* `Laurent=[Term {exp,coeff}]` + `addL`/`mulL`/`powL`/`normalise` `KauffmanKhovanov.hs:45`
+* State-sum `kauffmanBracket` `KauffmanKhovanov.hs:115` : `foldl addL` over `bracketState` for `2^n` states, `stateFactor` = `A`/`A⁻¹` product, `smoothCircles` + `circleFactor = δ^{k-1}`
+* `writhe` `KauffmanKhovanov.hs:139` + `jones` `KauffmanKhovanov.hs:148` (`A^{-3w}` + sign) — **link invariant**
+* Theorems `bracketYB` `KauffmanKhovanov.hs:183` and `jonesYB` `KauffmanKhovanov.hs:188` : `{kauffmanBracket lhsYB == rhsYB}` — YB invariance via `==. *** QED`
+* Khovanov: `KhovanovGen {qGrade,iGrade,state,label}` `KauffmanKhovanov.hs:199`, `enhancedStates`/`khovanovComplex` `KauffmanKhovanov.hs:218`, `differential` `KauffmanKhovanov.hs:250` (edge `0→1`), `eulerChar` `KauffmanKhovanov.hs:276` → `eulerJones` `KauffmanKhovanov.hs:288` : `{eulerChar (khovanovComplex b) == jones b}`
+* `betti`/`khovanovPolynomial` `KauffmanKhovanov.hs:330`, Markov `markovI/II` `KauffmanKhovanov.hs:347` + `markovInvariance`
+
+### 8. Liquid Haskell — Khovanov Differential (`src/Topos/KhovanovDifferential.hs`)
+
+Complete TQFT differential with `d²=0`:
+
+* `Label = Bool` (1/X), Frobenius `m` `KhovanovDifferential.hs:92` (`1⊗1→1`, `X⊗X→0`) / `delta` `KhovanovDifferential.hs:100` (`1→1⊗X+X⊗1`, `X→X⊗X`)
+* `signOf` `KhovanovDifferential.hs:114` = `(-1)^{#1s before pos}`, `applyMerge`/`applySplit` `KhovanovDifferential.hs:146` with circle-index surgery (`removeAt`/`insertAt`)
+* Geometry oracle `geometryAt` `KhovanovDifferential.hs:182` (merge vs split), `dComponent` `KhovanovDifferential.hs:189` (`q+1,i+1` + signed `lab'`), `differential` `KhovanovDifferential.hs:210` over all `zeros`
+* Chain `d`/`normaliseChain` `KhovanovDifferential.hs:225`, **`dSquaredZero` `KhovanovDifferential.hs:254` : `{normaliseChain (d (d ch)) == []}`**
+* `differentialMatrix` `KhovanovDifferential.hs:263`, examples `unknotGen` `KhovanovDifferential.hs:283`
 
 ---
 
@@ -109,18 +142,7 @@ All four kernels (Haskell `normalize:53`, Datalog `equiv_word`, NESL `normalize_
 * **Spec:** `prolog/*.lp` + `datalog/*.dl` (declarative)
 * **Reference:** `src/Topos/Core.hs` (pure functional)
 * **Parallel:** `nesl/topos.nesl` (nested) + `dataflow/topos.df` (array/stream) — drop-in for GPU / dataflow hardware
-
-* **Strand algebra:** `Strand`, `Crossing{Over|Under}`, `Twist`, `Generator{Parallel|Seq}`
-* **Braid monoid:** `compose`, `parallel`, `identity`, `normalize` (FarCommute / Yang-Baxter / Inverse rewrites)
-* **Invariants embedded:**
-  * **Jones** via Kauffman bracket + writhe normalization (`jones`, `measureJones`)
-  * **Alexander** via Fox calculus (`alexander`, `measureAlexander`)
-  * **HOMFLY** 2-variable (`homfly`, `measureHOMFLY`)
-  * **Burau** representation (`burau`, matrix over `Laurent`)
-* **Quantum embedding:** `Anyon{Fib|Ising|Custom}`, `Fusion`, `RMatrix`, `QuantumBraid`, `embedQuantum`
-* **Tangle calculus:** `Tangle`, `composeTangle`, `rationalTangle`, `genusEstimate`, `linkingNumber`
-* **Examples:** `trefoil`, `figureEight`, `hopfLink`, `cinquefoil`, `stevedore`, `pretzel`, `pureBraid3`, `sigma` generators, `parametricStrands`
-* **DSL surface:** `Stmt`, `Program`, `evalProgram`, `parseSurface` (stub for `braid { strand a,b,c; crossing(a,b,over); ... }`), `Classical{Let|If|While}`
+* **Verified:** `src/Topos/KauffmanKhovanov.hs` + `src/Topos/KhovanovDifferential.hs` (Liquid Haskell, PLE-proved `bracketYB`, `eulerJones`, `d²=0`)
 
 ```haskell
 -- braid { strand a,b,c ; crossing(a,b,over); twist(a, full_turn); measure_jones(a,b) }
@@ -137,16 +159,18 @@ print (linkingNumber hopfLink (strand "x") (strand "y")) -- 1
 
 ```
 topos/
-├── src/Topos/Core.hs          # 740 LOC braid + invariants core (Haskell)
-├── nesl/topos.nesl             # 400 LOC NESL nested-parallel kernel
-├── dataflow/topos.df           # 400 LOC dataflow / array-parallel kernel
-├── prolog/state_machine.lp     # FSA jump-table (clingo ASP)
-├── prolog/timing.lp            # reset latency constraint
-├── datalog/braid_axioms.dl     # Souffle/DDlog Yang-Baxter axioms
-├── docs/architecture.md        # full synthesis notes
-├── examples/                   # braid programs + poisoning traces
-├── app/Main.hs                 # demo runner
-├── test/Spec.hs                # HUnit + QuickCheck (writhe, YB, normalize)
+├── src/Topos/Core.hs                # 740 LOC braid + invariants core
+├── src/Topos/KauffmanKhovanov.hs    # 500 LOC Liquid Kauffman + Khovanov (bracketYB/eulerJones)
+├── src/Topos/KhovanovDifferential.hs# 400 LOC Liquid differential (m/delta, d²=0)
+├── nesl/topos.nesl                  # 344 LOC NESL nested-parallel kernel
+├── dataflow/topos.df                # 405 LOC dataflow / array-parallel kernel
+├── prolog/state_machine.lp          # FSA jump-table (clingo ASP)
+├── prolog/timing.lp                 # reset latency constraint
+├── datalog/braid_axioms.dl          # Souffle/DDlog Yang-Baxter axioms
+├── docs/architecture.md             # full synthesis notes
+├── examples/                        # braid programs + poisoning traces
+├── app/Main.hs                      # demo runner
+├── test/Spec.hs                     # HUnit + QuickCheck
 ├── topos.cabal
 └── README.md
 ```
@@ -198,6 +222,15 @@ nesl -r invariance_suite nesl/topos.nesl
 ts-node dataflow/topos.df  # build_yb_invariance_graph + assert_yb_invariance()
 node -e "import('./dataflow/topos.df').assert_yb_invariance()"
 # expects true — batch_jones([σ₁σ₂σ₁, σ₂σ₁σ₂]) yields equal sparse polys
+```
+
+### Liquid Haskell
+
+```bash
+# requires liquidhaskell + z3
+cabal build  # with -f liquid
+liquid src/Topos/KauffmanKhovanov.hs    # checks bracketYB, jonesYB, eulerJones
+liquid src/Topos/KhovanovDifferential.hs # checks dSquaredZero : d (d ch) == []
 ```
 
 ---

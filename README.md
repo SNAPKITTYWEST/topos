@@ -37,6 +37,7 @@ cabal build; cabal run topos-demo; cabal test
 # ASP (clingo)
 clingo prolog/state_machine.lp
 clingo prolog/timing.lp
+clingo prolog/pipeline.lp
 
 # Datalog (Souffle)
 souffle datalog/braid_axioms.dl -D -
@@ -75,6 +76,7 @@ liquid src/Topos/TQFT/Functor.hs
 | `TOPOS-FILE-014-README` | `README.md` | 雙語 README（本檔案）、節點連結 | SL-AGPL3-001 / MGPLv3 |
 | `TOPOS-FILE-015-Cabal` | `topos.cabal` | 組建描述、6個暴露模組 | SL-AGPL3-001 / MGPLv3 |
 | `TOPOS-FILE-016-Architecture` | `docs/architecture.md` | 架構、十重YB等價性 | SL-AGPL3-001 / MGPLv3 |
+| `TOPOS-FILE-017-Pipeline` | `prolog/pipeline.lp` | 編譯管線確定性狀態轉換、熵限、τ中毒閘 | SL-AGPL3-001 / MGPLv3 |
 
 詳見 [`docs/NODE_MANIFEST.json`](docs/NODE_MANIFEST.json) 與 [`docs/PROVENANCE.md`](docs/PROVENANCE.md)；授權見 [`LICENSE`](LICENSE)。
 
@@ -251,6 +253,18 @@ Pure functor + deep homology applications:
 * `KhGen {q,i,s,e}` → `dTQFT` `Functor.hs:106` (`if even pos then Merge else Split` + `eval`), `d` `Functor.hs:118`, `cycles`/`boundaries`/`homology` `Functor.hs:126` (`normalise [g | z∖b]`)
 * **Deep:** `eulerChar` + `categorification` `Functor.hs:145` (`eulerChar (homology ch)==eulerChar ch`), `inducedHom`/`F_mor_chain` `Functor.hs:154`, `homologyFunctor` `Functor.hs:165` (`F(f∘g)==F f∘F g` on homology), `SES`/`connecting` (long exact), `Page`/`turnPage` (spectral sequence)
 
+
+### 12. Compilation Pipeline — Deterministic Transitions (`prolog/pipeline.lp`)
+
+7-stage plasma-gate enforced pipeline grounded in Topos formal verification:
+
+* **Stages:** `topos_dsl → classical_dataflow → quantum_circuit → quantum_ir → {simulator_input, optimizer_input} → hardware_mapping` `pipeline.lp:9`
+* **Transitions (entropy-costed):** `parse 0.00` → `elaborate 0.01` (YB verified) → `encode 0.02` (pentagon via `f_matrix_consistent`) → `branch 0.005` → `reduce 0.015` (YB + entropy_reduced) → `map_hw Entropy≤0.20` with `T_pulse ≤ TauMin - 0.001` (`tau_poison_min` from ENKI) `pipeline.lp:19`
+* **Global gates:** `:- E>0.20` (entropy never exceeds) `pipeline.lp:68`, `:- not tau_poison_satisfied` for `hardware_mapping`, `equivalent(S1,S2)` preserves semantics
+* **Optimization:** `#minimize` total entropy + unverified stages `pipeline.lp:82`
+
+Links the earlier FSA (`state_machine.lp`) and timing (`timing.lp:41` `tau_poison_min`) to the braid stack — hardware mapping is strictly `τ_poison`-gated.
+
 ---
 
 ### Combined View
@@ -314,6 +328,7 @@ Requires GHC ≥ 9.2, cabal ≥ 3.10.
 ```bash
 clingo prolog/state_machine.lp
 clingo prolog/timing.lp
+clingo prolog/pipeline.lp
 ```
 
 Stable model verifies plasma gate; `unscalable/1` witnesses cliff.

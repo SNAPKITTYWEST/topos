@@ -58,6 +58,7 @@ extra-doc-files:    README.md
                     docs/architecture.md
                     prolog/state_machine.lp
                     prolog/timing.lp
+                    prolog/pipeline.lp
                     datalog/braid_axioms.dl
                     nesl/topos.nesl
                     dataflow/topos.df

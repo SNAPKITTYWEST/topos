@@ -33,6 +33,8 @@ Each header records Node-ID, Parent-Work, License-ID, Source-Hash (SHA256 of pre
 | TOPOS-FILE-015-Cabal | `topos.cabal` | cabal manifest, 6 exposed modules | `86e850b57f145b72…` |
 | TOPOS-FILE-016-Architecture | `docs/architecture.md` | architecture 10-way YB equivalence | `18f94c97566beb85…` |
 
+| TOPOS-FILE-017-Pipeline | `prolog/pipeline.lp` | TOPOS compilation pipeline deterministic state transitions, entropy-bounded, tau_poison-gated | `34c5dcbd9a8d1fd9…` |
+
 ## Verification
 
 - text preservation checked

@@ -163,6 +163,16 @@
       "license": "SL-AGPL3-001 / MGPLv3",
       "covenantVersion": "1.0",
       "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-017-Pipeline",
+      "file": "prolog/pipeline.lp",
+      "location": "pipeline.lp:90",
+      "description": "TOPOS compilation pipeline deterministic state transitions, entropy-bounded, tau_poison-gated",
+      "sha256": "34c5dcbd9a8d1fd97691134b75a2d5dc004a34d953a4edb1ef67d695b8a83b4f",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
     }
   ]
 }

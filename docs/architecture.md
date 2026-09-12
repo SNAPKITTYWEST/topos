@@ -139,7 +139,15 @@ Both are drop-in replacements for the Haskell reference when targeting GPU (NESL
 * `KhGen/dTQFT/d` `TQFT/Functor.hs:106` rebuilds Khovanov *via the functor*: `dTQFT` picks `Merge/Split` cobordism per `pos` and evaluates it; `homology` `TQFT/Functor.hs:134` = `cycles / boundaries` via `appears`.
 * **Deep homology theorems**: `categorification` (`eulerChar∘homology = eulerChar`), `inducedHom`/`homologyFunctor` `TQFT/Functor.hs:154` (cobordism-induced maps respect composition), `SES`/`connecting` (long exact sequence), `Page`/`turnPage` (spectral sequence skeleton) `TQFT/Functor.hs:173` — the functor unlocks functoriality, LES, and SS for Khovanov.
 
-## 10. Future Formalization Path
+
+## 10. Compilation Pipeline (Deterministic Transitions)
+
+* **7 stages** `pipeline.lp:9` — `topos_dsl` (DSL grammar `valid_topos_syntax`), `classical_dataflow` (AST/BraidWord), `quantum_circuit` (YB verified), `quantum_ir` (fusion path + `pentagon_equation_holds`), branching to `simulator_input`/`optimizer_input`, `reduce` (YB + `entropy_reduced`), `hardware_mapping` (pulse sequence).
+* **Plasma gates:** entropy `≤0.20` at every transition `pipeline.lp:68`, `T_pulse ≤ TauMin - 0.001` ties directly to `timing.lp:41` (`tau_poison_min(Lambda,TauMin) :- TauMin > 0.15/Lambda`). Violations are integrity constraints (`:-`).
+* **Semantic equivalence** `equivalent(S1,S2) :- transition(S1,_,S2,_), semantic_preserved` preserves meaning through the pipeline — the pipeline is a refinement of the FSA, not a separate system.
+
+## 11. Future Formalization Path
+
 
 * Replace placeholder `ybRewrite` with a proper permutation of `Over/Under` and add `Reidemeister I` (`Tw` normalization).
 * Implement `parseSurface` as a Parsec/Megaparsec recursive descent for the `braid { ... }` syntax; generate both Haskell `Braid` and Datalog `word/2` facts from the same parse.

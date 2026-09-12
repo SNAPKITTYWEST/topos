@@ -176,13 +176,6 @@ graph LR
 ```bash
 ts-node dataflow/topos.df  # build_yb_invariance_graph + assert_yb_invariance()
 # → true  (sparse polys equal)
-```
-
----
-
-## Formal Gap (from your synthesis)
-
-The jump-table reveals: **topological protection ≠ structural immunity**. It lowers the *weight* of poisoning edges, but any `quasiparticle_tunnel` still collapses the manifold. Engineering reduces to a race:
 
 > `T_reset  <  τ_poison`  and  `λ < 150 entropy/ms` — otherwise reset is thermodynamically forbidden.
 

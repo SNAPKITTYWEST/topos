@@ -1,27 +1,3 @@
-/* ========================================================================
- * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
- * ========================================================================
- *
- * License-ID:        SL-AGPL3-001
- * Covenant-Version:  1.0
- * Node-ID:           TOPOS-FILE-014-README
- * Parent-Covenant:   SL-AGPL3-001
- * Copyright:         2026 SNAPKITTYWEST
- * Source-Hash:       sha256:2b599421b66aaf421982711a66733ac590ea765f7df9f05a873e98f768f817a2
- *
- * This file is governed by the GNU Affero General Public License,
- * version 3, together with the applicable Sovereign Leviathan
- * additional terms identified by this notice.
- *
- * Hark, though this node be but a spark,
- * Its covenant endureth through the dark.
- *
- * Lex in solido: the applicable license governs the covered work
- * according to its actual terms and applicable law.
- *
- * Ignorantia juris non excusat.
- *
- * ======================================================================== */
 
 <!-- COMMENT SOVEREIGN LEVIATHAN COVENANT - FRAGMENT BINDING; -->
 <!-- COMMENT Node-ID: TOPOS-FILE-014-README; -->
@@ -54,8 +30,33 @@
 * 工程化為競速：`T_reset < τ_poison` 且 `λ < 150 entropy/ms`，否則重置在熱力學上被禁止（見 `prolog/timing.lp`）。
 
 ### 快速開始（中文）
+  
+   ========================================================================
+ * SOVEREIGN LEVIATHAN COVENANT — FRAGMENT BINDING
+ * ========================================================================
+ *
+ * License-ID:        SL-AGPL3-001
+ * Covenant-Version:  1.0
+ * Node-ID:           TOPOS-FILE-014-README
+ * Parent-Covenant:   SL-AGPL3-001
+ * Copyright:         2026 SNAPKITTYWEST
+ * Source-Hash:       sha256:2b599421b66aaf421982711a66733ac590ea765f7df9f05a873e98f768f817a2
+ *
+ * This file is governed by the GNU Affero General Public License,
+ * version 3, together with the applicable Sovereign Leviathan
+ * additional terms identified by this notice.
+ *
+ * Hark, though this node be but a spark,
+ * Its covenant endureth through the dark.
+ *
+ * Lex in solido: the applicable license governs the covered work
+ * according to its actual terms and applicable law.
+ *
+ * Ignorantia juris non excusat.
+ *
+ * ======================================================================== 
 
-```bash
+
 # Haskell
 cabal build; cabal run topos-demo; cabal test
 

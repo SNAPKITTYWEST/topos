@@ -1,3 +1,35 @@
+-- COMMENT SOVEREIGN LEVIATHAN COVENANT - FRAGMENT BINDING;
+-- COMMENT Node-ID: TOPOS-FILE-002-KauffmanKhovanov;
+-- COMMENT Parent-Work: topos;
+-- COMMENT Parent-Covenant: SL-AGPL3-001;
+-- COMMENT Copyright: 2026 SNAPKITTYWEST;
+-- COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
+-- COMMENT Covenant-Version: 1.0;
+-- COMMENT Source-Hash: sha256:0161605ee5918010f28c3d80582fb384c4ba877f9fb88fdf0f05ddbc626e146f;
+-- COMMENT Hash-Scope: source before generated license headers, UTF-8 LF;
+-- COMMENT Creation-Date: 2026-09-12 (provenance record);
+-- COMMENT Modification-Record: added license and node headers only;
+-- COMMENT Verification-Record: text preservation checked, compilation not verified;
+-- COMMENT Governed by GNU Affero General Public License version 3;
+-- COMMENT together with applicable Sovereign Leviathan additional terms;
+-- COMMENT AGPLv3 terms remain authoritative where additional terms do not validly apply;
+-- COMMENT See LICENSE and docs/PROVENANCE.md;
+-- COMMENT 
+-- COMMENT ===========================================================;
+-- COMMENT SOVEREIGN NODE KEY: TOPOS-FILE-002-KauffmanKhovanov-BLK-001-001-1;
+-- COMMENT Parent-ID: TOPOS-FILE-002-KauffmanKhovanov;
+-- COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
+-- COMMENT Covenant-Version: 1.0;
+-- COMMENT Copyright: 2026 SNAPKITTYWEST;
+-- COMMENT License-Location: LICENSE;
+-- COMMENT Provenance: docs/NODE_MANIFEST.json;
+-- COMMENT BLOCK 001;
+-- COMMENT Component: KauffmanKhovanov.hs;
+-- COMMENT Purpose: Kauffman bracket state-sum, Jones, Khovanov homology, eulerJones;
+-- COMMENT Inputs: varies;
+-- COMMENT Outputs: varies;
+-- COMMENT ===========================================================;
+-- COMMENT 
 {-@ LIQUID "--reflection" @-}
 {-@ LIQUID "--ple"        @-}
 {-@ LIQUID "--no-termination" @-}

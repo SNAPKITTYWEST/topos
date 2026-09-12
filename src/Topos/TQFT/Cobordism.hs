@@ -1,3 +1,35 @@
+-- COMMENT SOVEREIGN LEVIATHAN COVENANT - FRAGMENT BINDING;
+-- COMMENT Node-ID: TOPOS-FILE-004-TQFT-Cobordism;
+-- COMMENT Parent-Work: topos;
+-- COMMENT Parent-Covenant: SL-AGPL3-001;
+-- COMMENT Copyright: 2026 SNAPKITTYWEST;
+-- COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
+-- COMMENT Covenant-Version: 1.0;
+-- COMMENT Source-Hash: sha256:49609b59ff031a9ab29ab79e5217d785ddbaa43e2c5c7ed3d26c057fabef6b80;
+-- COMMENT Hash-Scope: source before generated license headers, UTF-8 LF;
+-- COMMENT Creation-Date: 2026-09-12 (provenance record);
+-- COMMENT Modification-Record: added license and node headers only;
+-- COMMENT Verification-Record: text preservation checked, compilation not verified;
+-- COMMENT Governed by GNU Affero General Public License version 3;
+-- COMMENT together with applicable Sovereign Leviathan additional terms;
+-- COMMENT AGPLv3 terms remain authoritative where additional terms do not validly apply;
+-- COMMENT See LICENSE and docs/PROVENANCE.md;
+-- COMMENT 
+-- COMMENT ===========================================================;
+-- COMMENT SOVEREIGN NODE KEY: TOPOS-FILE-004-TQFT-Cobordism-BLK-001-001-1;
+-- COMMENT Parent-ID: TOPOS-FILE-004-TQFT-Cobordism;
+-- COMMENT License-ID: SL-AGPL3-001 / MGPLv3;
+-- COMMENT Covenant-Version: 1.0;
+-- COMMENT Copyright: 2026 SNAPKITTYWEST;
+-- COMMENT License-Location: LICENSE;
+-- COMMENT Provenance: docs/NODE_MANIFEST.json;
+-- COMMENT BLOCK 001;
+-- COMMENT Component: Cobordism.hs;
+-- COMMENT Purpose: TQFT double-layer, Frobenius, evalCob, categorification;
+-- COMMENT Inputs: varies;
+-- COMMENT Outputs: varies;
+-- COMMENT ===========================================================;
+-- COMMENT 
 {-@ LIQUID "--reflection" @-}
 {-@ LIQUID "--ple" @-}
 {-@ LIQUID "--no-termination" @-}

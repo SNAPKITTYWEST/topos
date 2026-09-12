@@ -1,0 +1,168 @@
+{
+  "covenant": "SOVEREIGN LEVIATHAN COVENANT",
+  "parentWork": "topos",
+  "license": "SL-AGPL3-001 / MGPLv3",
+  "generated": "2026-09-12T03:15:36.673835",
+  "nodes": [
+    {
+      "nodeId": "TOPOS-FILE-001-Core",
+      "file": "src/Topos/Core.hs",
+      "location": "Core.hs:740",
+      "description": "braid algebra, Yang-Baxter, Jones/Alexander/HOMFLY, Burau, tangle",
+      "sha256": "6fd5bd22fb0ba87243ca7cde5f6a77bace8e876cc45d52bc320ce2b64b0a91d6",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-002-KauffmanKhovanov",
+      "file": "src/Topos/KauffmanKhovanov.hs",
+      "location": "KauffmanKhovanov.hs:400",
+      "description": "Kauffman bracket state-sum, Jones, Khovanov homology, eulerJones",
+      "sha256": "0161605ee5918010f28c3d80582fb384c4ba877f9fb88fdf0f05ddbc626e146f",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-003-KhovanovDifferential",
+      "file": "src/Topos/KhovanovDifferential.hs",
+      "location": "KhovanovDifferential.hs:363",
+      "description": "Khovanov differential, Frobenius m/delta, d²=0",
+      "sha256": "e3212ad5cc2d78f95d63fa99421adaa93fe2db638b1ec844b512058780c75eeb",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-004-TQFT-Cobordism",
+      "file": "src/Topos/TQFT/Cobordism.hs",
+      "location": "TQFT/Cobordism.hs:428",
+      "description": "TQFT double-layer, Frobenius, evalCob, categorification",
+      "sha256": "49609b59ff031a9ab29ab79e5217d785ddbaa43e2c5c7ed3d26c057fabef6b80",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-005-BarNatan-DottedCobordism",
+      "file": "src/Topos/BarNatan/DottedCobordism.hs",
+      "location": "BarNatan/DottedCobordism.hs:376",
+      "description": "Bar-Natan dotted cobordism, BN1-6, matrixOf",
+      "sha256": "2036d93295268ea14931c6628314384446ab9c1091f33f7801a3b9986bf7a029",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-006-TQFT-Functor",
+      "file": "src/Topos/TQFT/Functor.hs",
+      "location": "TQFT/Functor.hs:395",
+      "description": "Functor F:Cob→Vect, homology, LES/spectral",
+      "sha256": "367bc1e6b856d4e86a3586e818ebaf2e432c7ebf8c6c0195ebb1960ea8229d7c",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-007-state-machine",
+      "file": "prolog/state_machine.lp",
+      "location": "state_machine.lp:71",
+      "description": "FSA jump-table, poisoning leak, plasma gate",
+      "sha256": "722595a09a77d25399896c42eb625cb44a24e43ceb085a5d4a73aea8b6e922dc",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-008-timing",
+      "file": "prolog/timing.lp",
+      "location": "timing.lp:101",
+      "description": "reset latency bound, λ_max=150, unscalable",
+      "sha256": "a47dff3400b2cdbb2f3a60a16ee70261cb013770eae5cfc5ceeb0882dae2f4f9",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-009-braid-axioms",
+      "file": "datalog/braid_axioms.dl",
+      "location": "braid_axioms.dl:164",
+      "description": "Braids B_n, Yang-Baxter saturation, equiv",
+      "sha256": "f70acc9875c8fc7d57da5c4060c5fff32ed0933e138ea369e09d59b9fe1910b6",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-010-NESL",
+      "file": "nesl/topos.nesl",
+      "location": "topos.nesl:344",
+      "description": "NESL nested-parallel YB/Jones",
+      "sha256": "1e36b13ee778ad1fa762f814d6449a5be0618be71c0eed7d42500c531a5395ed",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-011-Dataflow",
+      "file": "dataflow/topos.df",
+      "location": "topos.df:405",
+      "description": "Dataflow array-parallel YB/Jones actors",
+      "sha256": "b25b8f29995828982e5abfb994715b8bff8f5dcba4b72964da566cb0c6df80d9",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-012-Main",
+      "file": "app/Main.hs",
+      "location": "Main.hs:35",
+      "description": "demo runner, writhe, Jones, YB demo",
+      "sha256": "e86267848013425899158197d8fa32b1e400d1879b1214b21d06f1550b793586",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-013-Spec",
+      "file": "test/Spec.hs",
+      "location": "Spec.hs:30",
+      "description": "HUnit/QuickCheck tests, normalize idempotent",
+      "sha256": "0e5803eed612d8a3f8202fd8734af54dfb86b2a6472cf050486f5e69a138ff57",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-014-README",
+      "file": "README.md",
+      "location": "README.md",
+      "description": "bilingual README, Chinese top, English rest, node links",
+      "sha256": "cd8b51679e4149408a5402b8d9658427fabd7ef464b611042491f6388e268fe6",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-015-Cabal",
+      "file": "topos.cabal",
+      "location": "topos.cabal:72",
+      "description": "cabal manifest, 6 exposed modules",
+      "sha256": "86e850b57f145b7287abb42746b230756c929035d00f56f085a78ce37f6965db",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    },
+    {
+      "nodeId": "TOPOS-FILE-016-Architecture",
+      "file": "docs/architecture.md",
+      "location": "architecture.md:110",
+      "description": "architecture 10-way YB equivalence",
+      "sha256": "18f94c97566beb85fa660f7751afc4ab47542c703827538a3e3ed1247f70cd60",
+      "license": "SL-AGPL3-001 / MGPLv3",
+      "covenantVersion": "1.0",
+      "creationDate": "2026-09-12"
+    }
+  ]
+}

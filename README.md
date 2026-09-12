@@ -101,31 +101,6 @@ Stochastic Physics  ──►  Discrete Jump-Table  ──►  Braid Monoid + In
                      Liquid Kauffman/Khovanov + differentials (verified)
                      TQFT Cobordism + Bar-Natan + Functor F:Cob→Vect (all 9 kernels agree on YB)
 
-## Layout
-
-```
-topos/
-├── src/Topos/Core.hs                     # 740 LOC braid + invariants core
-├── src/Topos/KauffmanKhovanov.hs         # 400 LOC Liquid Kauffman + Khovanov
-├── src/Topos/KhovanovDifferential.hs     # 363 LOC Liquid differential
-├── src/Topos/TQFT/Cobordism.hs           # 430 LOC double-layer TQFT + categorification
-├── src/Topos/BarNatan/DottedCobordism.hs # 370 LOC RAW DOUBLE-DOUBLE Bar-Natan
-├── src/Topos/TQFT/Functor.hs             # 410 LOC pure functor F:Cob→Vect + homology
-├── nesl/topos.nesl                       # 344 LOC NESL nested-parallel
-├── dataflow/topos.df                     # 405 LOC dataflow / array-parallel
-├── prolog/state_machine.lp               # FSA jump-table (clingo)
-├── prolog/timing.lp                      # reset latency
-├── datalog/braid_axioms.dl               # Yang-Baxter saturation
-├── docs/architecture.md                  # architecture + 7-way YB table
-├── examples/                             # braid programs + traces
-├── app/Main.hs                           # demo runner
-├── test/Spec.hs                          # HUnit + QuickCheck
-├── topos.cabal
-└── README.md
-```
-
----
-
 ## Quickstart — Flowcharts (not slop)
 
 > **From this point down — flowcharts, not slop.** Each stage is a deterministic transition with plasma-gate entropy ≤0.20 and `τ_poison` gating — runnable via the commands embedded in the charts.

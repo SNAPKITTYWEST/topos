@@ -1,0 +1,11 @@
+-- Surface syntax example: braid { strand a,b,c; crossing(a,b,over); crossing(b,c,over); crossing(c,a,over) }
+braid {
+ strand a, b, c
+ crossing(a, b, over)
+ crossing(b, c, over)
+ crossing(c, a, over)
+ measure_jones(a, b)
+}
+-- Normalized word should be invariant under Yang-Baxter:
+-- sigma1 sigma2 sigma1  ≡  sigma2 sigma1 sigma2
+-- Corresponds to Datalog: equiv_word("w_lhs","w_rhs")

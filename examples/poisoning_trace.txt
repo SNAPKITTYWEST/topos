@@ -1,0 +1,11 @@
+Poisoning trace (FSA from prolog/state_machine.lp):
+
+ground_topological --gate_pulse(0.01)--> braiding_transition --quasiparticle_tunnel(0.20)--> poisoned_collapse
+  | invalid_op(braiding_transition, quasiparticle_tunnel) = VOID (plasma gate fires)
+  +--charge_readout(0.02)--> ground_topological   [valid if no poisoning]
+  +--reset(0.05)--> ground_topological            [recovery after collapse]
+
+Entropy budget: total <= 0.20. Any braiding + poisoning = 0.01+0.20=0.21 > 0.20 => rejected by valid_transition/3.
+
+Timing: need T_reset <= 0.15 / lambda. For lambda=30 (typical electronics), T_reset_max=5us.
+If tau_poison_min=1us, even T_reset=5us is too slow => must push tau_poison to >5us or reduce lambda.

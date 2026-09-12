@@ -1,0 +1,17 @@
+dist-newstyle/
+dist/
+.stack-work/
+*.hi
+*.o
+*.dyn_hi
+*.dyn_o
+cabal.project.local
+cabal.project.local~
+.ghc.environment.*
+result
+result-*
+*.swp
+*~
+.DS_Store
+Thumbs.db
+.env

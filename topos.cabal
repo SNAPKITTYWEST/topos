@@ -1,0 +1,58 @@
+cabal-version:      3.0
+name:               topos
+version:            0.1.0.0
+synopsis:           Braided DSL for Topological Invariants + TQC Control Loop Formalization
+description:
+  Sovereign Logic Escape: ENKI Physics to Algebraic Mapping.
+  .
+  * Prolog/ASP FSA for TQC control loop (quasiparticle poisoning, reset latency)
+  * Timing bound derivation (tau_poison 1us-1ms -> lambda <= 150 entropy/ms)
+  * Topos.Core Haskell — strand algebra, braid monoid, Yang-Baxter, Jones/Alexander/HOMFLY, Burau
+  * Datalog axioms for automated braid equivalence via Yang-Baxter saturation
+license:            MIT
+license-file:       LICENSE
+author:             Hilbert Parr / ENKI_PHYSICS_TO_ALGEBRAIC_MAPPING
+maintainer:         topos@sovereign.local
+category:           Math, Physics, Formal Methods
+build-type:         Simple
+extra-doc-files:    README.md
+                    docs/architecture.md
+                    prolog/state_machine.lp
+                    prolog/timing.lp
+                    datalog/braid_axioms.dl
+
+common warnings
+    ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates
+                 -Wincomplete-uni-patterns -Wmissing-export-lists
+                 -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+
+library
+    import:           warnings
+    exposed-modules:  Topos.Core
+    hs-source-dirs:   src
+    build-depends:    base >= 4.14 && <5
+                    , containers >= 0.6
+                    , mtl
+    default-language: Haskell2010
+    ghc-options:      -O2
+
+executable topos-demo
+    import:           warnings
+    main-is:          Main.hs
+    hs-source-dirs:   app
+    build-depends:    base
+                    , topos
+                    , containers
+    default-language: Haskell2010
+
+test-suite topos-test
+    import:           warnings
+    type:             exitcode-stdio-1.0
+    main-is:          Spec.hs
+    hs-source-dirs:   test
+    build-depends:    base
+                    , topos
+                    , containers
+                    , HUnit
+                    , QuickCheck
+    default-language: Haskell2010

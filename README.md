@@ -14,9 +14,10 @@ Stochastic Physics  ──►  Discrete Jump-Table  ──►  Braid Monoid + In
 (τ_poison ~ 1μs-1ms)    (FSA: ground ─► braiding ─► measurement ─► poisoned)
                                                     │
                                                     ▼
-                     Topos.Core (Haskell) + Datalog Yang-Baxter
+                     Topos.Core + Datalog (spec/ref)
                      NESL + Dataflow (parallel YB/Jones)
-                     Liquid Kauffman/Khovanov (verified d²=0, bracketYB, eulerJones)  (all 6 kernels agree on YB)
+                     Liquid Kauffman/Khovanov + differentials (verified)
+                     TQFT Cobordism + Bar-Natan + Functor F:Cob→Vect (all 9 kernels agree on YB)
 ```
 
 ### 1. Jump-Table — Sub-Topological Control Layer (`prolog/state_machine.lp`)
@@ -112,7 +113,7 @@ Same semantics as NESL but as **explicit dataflow graph** with token-driven acto
 * Laurent actors `AddLaurActor`/`MulLaurActor`/`ScaleLaurActor` (Map-based normalisation), `BracketActor`/`WritheActor`/`JonesActor` pipeline
 * Top-level `build_yb_invariance_graph` (LHS `σ₁σ₂σ₁` vs RHS `σ₂σ₁σ₂` through `FreeReduce→YBWindow→Bracket→Writhe→Jones`), `batch_normalize`/`batch_jones` array-parallel, `assert_yb_invariance` sparse-poly equality, `BraidStreamProcessor` streaming interface
 
-All six kernels (Haskell `normalize:53`, Datalog `equiv_word`, NESL `normalize_yb`, Dataflow `YBWindowActor`, Liquid `kauffmanBracket`, `differential`) implement the **same Artin relation** `σ₁σ₂σ₁ ≡ σ₂σ₁σ₂` — cross-check any pair for consistency.
+All nine kernels (Haskell `normalize:53`, Datalog `equiv_word`, NESL `normalize_yb`, Dataflow `YBWindowActor`, Liquid `kauffmanBracket`, `differential` + 3 TQFT) implement the **same Artin relation** `σ₁σ₂σ₁ ≡ σ₂σ₁σ₂` — cross-check any pair for consistency.
 
 ### 7. Liquid Haskell — Kauffman Bracket + Khovanov (`src/Topos/KauffmanKhovanov.hs`)
 
@@ -137,12 +138,46 @@ Complete TQFT differential with `d²=0`:
 
 ---
 
+### 9. TQFT Cobordism — Double-Layer (`src/Topos/TQFT/Cobordism.hs`)
+
+Dense double-layer with raw SMT + thick refinements:
+
+* **LAYER 0** primitive `Label=Bool (1/X)`, `Enhancement=[Label]`, `Crossing {cu,cl,co}` `Cobordism.hs:20`
+* **LAYER 1** Frobenius `A=Z[X]/X²` `Cobordism.hs:33` — `unit`/`counit`/`mult`/`comult` `Cobordism.hs:44` + lemmas `multUnitLeft/Right`, `multAssociative`, `comultCounit` (SMT)
+* **LAYER 2** `Cobordism` ADT `Cobordism.hs:82` (`Birth`/`Death`/`Merge i j`/`Split i`/`Dot`/`IdCob`/`Compose`/`Sum`/`Scale`)
+* **LAYER 3** `evalCob` `Cobordism.hs:113` — birth `1`, death `ε`, merge `m`, split `Δ`, dot `1→X`, `Compose` nested `eval`, `Sum` concat
+* **LAYER 4** `KhGen {kq,ki,ks,kl}` `Cobordism.hs:156` + `dCob` `Cobordism.hs:183` (`geometryToCob` `Merge 0 1`/`Split 0` + `signOf` + `q+1,i+1`) via `evalCob`
+* **LAYER 5** `d`/`normalise` + **`dSquared` `Cobordism.hs:222` : `{normalise (d (d ch)) == []}`**
+* **LAYER 6** `euler`/`jonesFromEuler` + `categorification` `Cobordism.hs:242` : `{jonesFromEuler (khComplex b) == jonesPoly b}`
+* **LAYER 9** `neckCutting/delooping/frobenius` SMT lemmas `Cobordism.hs:292`
+
+### 10. Bar-Natan Dotted Cobordism — RAW DOUBLE-DOUBLE (`src/Topos/BarNatan/DottedCobordism.hs`)
+
+Every generator/relation with thick SMT:
+
+* `Cob` ADT `DottedCobordism.hs:40` + `Cup/Cap/Saddle`, `Tensor` (disjoint union), `src/tgt` `DottedCobordism.hs:70` + `wellTyped`
+* **BN1-BN6** `DottedCobordism.hs:103` — `sphereEmpty` (∅→0), `sphereDot` (∅→1), `sphereTwoDots` (∅→0), `neckCutting`/`delooping`/`dotMigration` (Frobenius) — all `eval ... ==. ... *** QED`
+* `eval` `DottedCobordism.hs:147` (same Frobenius maps) + `Saddle` via neck-cutting `Sum (Tensor Death Birth) (Scale -1 ...)`
+* Double-category `hcomp/vcomp` `DottedCobordism.hs:201` + `assocH/V`, `matrixOf` + `allEnh` `DottedCobordism.hs:223` (universal TQFT), identities `idLeft/idRight/scaleZero/sumComm/tensorId`
+
+### 11. TQFT Functor `F: Cob → Vect_Z` (`src/Topos/TQFT/Functor.hs`)
+
+Pure functor + deep homology applications:
+
+* `F_obj n = (Z⟨1,X⟩)^{⊗n}` `Functor.hs:34`, `F_mor` `Functor.hs:40` (`normalise [e',c*c' | (e,c)∈v, (e',c')←eval f e]`), `eval` `Functor.hs:45` + `src/tgt` `Functor.hs:67`
+* **Functoriality** `Functor.hs:86` — `F_id` (`F (Id n) == id`), `F_comp` (`F(f∘g)==F f∘F g`), `F_sum`
+* `KhGen {q,i,s,e}` → `dTQFT` `Functor.hs:106` (`if even pos then Merge else Split` + `eval`), `d` `Functor.hs:118`, `cycles`/`boundaries`/`homology` `Functor.hs:126` (`normalise [g | z∖b]`)
+* **Deep:** `eulerChar` + `categorification` `Functor.hs:145` (`eulerChar (homology ch)==eulerChar ch`), `inducedHom`/`F_mor_chain` `Functor.hs:154`, `homologyFunctor` `Functor.hs:165` (`F(f∘g)==F f∘F g` on homology), `SES`/`connecting` (long exact), `Page`/`turnPage` (spectral sequence)
+
+---
+
 ### Combined View
 
 * **Spec:** `prolog/*.lp` + `datalog/*.dl` (declarative)
 * **Reference:** `src/Topos/Core.hs` (pure functional)
-* **Parallel:** `nesl/topos.nesl` (nested) + `dataflow/topos.df` (array/stream) — drop-in for GPU / dataflow hardware
-* **Verified:** `src/Topos/KauffmanKhovanov.hs` + `src/Topos/KhovanovDifferential.hs` (Liquid Haskell, PLE-proved `bracketYB`, `eulerJones`, `d²=0`)
+* **Parallel:** `nesl/topos.nesl` (nested) + `dataflow/topos.df` (array/stream) — GPU / streaming
+* **Verified:** `src/Topos/KauffmanKhovanov.hs` + `src/Topos/KhovanovDifferential.hs` (bracketYB/eulerJones/d²=0)
+* **TQFT:** `src/Topos/TQFT/Cobordism.hs` (double-layer, categorification) + `src/Topos/BarNatan/DottedCobordism.hs` (BN1-6, double category) + `src/Topos/TQFT/Functor.hs` (F:Cob→Vect, homology functor, LES/spectral)
 
 ```haskell
 -- braid { strand a,b,c ; crossing(a,b,over); twist(a, full_turn); measure_jones(a,b) }
@@ -159,18 +194,21 @@ print (linkingNumber hopfLink (strand "x") (strand "y")) -- 1
 
 ```
 topos/
-├── src/Topos/Core.hs                # 740 LOC braid + invariants core
-├── src/Topos/KauffmanKhovanov.hs    # 500 LOC Liquid Kauffman + Khovanov (bracketYB/eulerJones)
-├── src/Topos/KhovanovDifferential.hs# 400 LOC Liquid differential (m/delta, d²=0)
-├── nesl/topos.nesl                  # 344 LOC NESL nested-parallel kernel
-├── dataflow/topos.df                # 405 LOC dataflow / array-parallel kernel
-├── prolog/state_machine.lp          # FSA jump-table (clingo ASP)
-├── prolog/timing.lp                 # reset latency constraint
-├── datalog/braid_axioms.dl          # Souffle/DDlog Yang-Baxter axioms
-├── docs/architecture.md             # full synthesis notes
-├── examples/                        # braid programs + poisoning traces
-├── app/Main.hs                      # demo runner
-├── test/Spec.hs                     # HUnit + QuickCheck
+├── src/Topos/Core.hs                     # 740 LOC braid + invariants core
+├── src/Topos/KauffmanKhovanov.hs         # 400 LOC Liquid Kauffman + Khovanov
+├── src/Topos/KhovanovDifferential.hs     # 363 LOC Liquid differential
+├── src/Topos/TQFT/Cobordism.hs           # 430 LOC double-layer TQFT + categorification
+├── src/Topos/BarNatan/DottedCobordism.hs # 370 LOC RAW DOUBLE-DOUBLE Bar-Natan
+├── src/Topos/TQFT/Functor.hs             # 410 LOC pure functor F:Cob→Vect + homology
+├── nesl/topos.nesl                       # 344 LOC NESL nested-parallel
+├── dataflow/topos.df                     # 405 LOC dataflow / array-parallel
+├── prolog/state_machine.lp               # FSA jump-table (clingo)
+├── prolog/timing.lp                      # reset latency
+├── datalog/braid_axioms.dl               # Yang-Baxter saturation
+├── docs/architecture.md                  # architecture + 7-way YB table
+├── examples/                             # braid programs + traces
+├── app/Main.hs                           # demo runner
+├── test/Spec.hs                          # HUnit + QuickCheck
 ├── topos.cabal
 └── README.md
 ```
@@ -224,13 +262,16 @@ node -e "import('./dataflow/topos.df').assert_yb_invariance()"
 # expects true — batch_jones([σ₁σ₂σ₁, σ₂σ₁σ₂]) yields equal sparse polys
 ```
 
-### Liquid Haskell
+### Liquid Haskell (Kauffman / Khovanov / TQFT)
 
 ```bash
 # requires liquidhaskell + z3
-cabal build  # with -f liquid
-liquid src/Topos/KauffmanKhovanov.hs    # checks bracketYB, jonesYB, eulerJones
-liquid src/Topos/KhovanovDifferential.hs # checks dSquaredZero : d (d ch) == []
+cabal build
+liquid src/Topos/KauffmanKhovanov.hs         # bracketYB, jonesYB, eulerJones
+liquid src/Topos/KhovanovDifferential.hs     # dSquaredZero
+liquid src/Topos/TQFT/Cobordism.hs           # dSquared, categorification, Frobenius
+liquid src/Topos/BarNatan/DottedCobordism.hs # BN1-6, assocH/V, matrixOf
+liquid src/Topos/TQFT/Functor.hs             # F_id/F_comp, homologyFunctor
 ```
 
 ---

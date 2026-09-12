@@ -49,7 +49,7 @@ The predicate `unscalable/1` is the **formal specification** of the engineering 
 
 ### Equivalence across Kernels
 
-The same Artin relation `σ₁σ₂σ₁ ≡ σ₂σ₁σ₂` appears in **seven** places — intentionally redundant for cross-verification:
+The same Artin relation `σ₁σ₂σ₁ ≡ σ₂σ₁σ₂` appears in **ten** places — intentionally redundant for cross-verification:
 
 1. `normalize` / `applyYangBaxter` (Haskell rewrite, `src/Topos/Core.hs:145`)
 2. `equiv_word("w_lhs","w_rhs")` (Datalog fact + rules, `datalog/braid_axioms.dl:48`)
@@ -57,9 +57,12 @@ The same Artin relation `σ₁σ₂σ₁ ≡ σ₂σ₁σ₂` appears in **seven
 4. `is_yb_window` / `yb_rewrite` / `normalize_yb` (NESL nested-parallel, `nesl/topos.nesl:85`)
 5. `YBWindowActor.isYB` / `batch_normalize` (Dataflow array-parallel, `dataflow/topos.df:65`)
 6. `kauffmanBracket lhsYB == rhsYB` / `jonesYB` (Liquid `KauffmanKhovanov.hs:183`)
-7. `dSquaredZero` + `differential` sign-cancellation (Liquid `KhovanovDifferential.hs:254`) — YB is the `d²=0` coherence condition
+7. `dSquaredZero` + `differential` sign-cancellation (Liquid `KhovanovDifferential.hs:254`) — YB is the `d²=0` coherence
+8. `dSquared` / `dCob` via `evalCob` (TQFT Cobordism `TQFT/Cobordism.hs:222`, geometry → Merge/Split cobordism)
+9. `sphere*` / `neckCutting` / `delooping` (Bar-Natan `BarNatan/DottedCobordism.hs:103`, BN1-BN6)
+10. `F_comp` / `dTQFT` / `homologyFunctor` (Functor `TQFT/Functor.hs:86`, `F:Cob→Vect` preserves `Compose` → `d²=0` on homology)
 
-All seven must agree; `yb_invariance_demo` (NESL), `assert_yb_invariance` (Dataflow), `bracketYB`/`jonesYB` (Liquid) all witness `j(σ₁σ₂σ₁) == j(σ₂σ₁σ₂)` on sparse Laurent polys — identical to Haskell `jones lhs == jones rhs` and Datalog `equiv("lhs","rhs")`.
+All ten must agree; `yb_invariance_demo` (NESL), `assert_yb_invariance` (Dataflow), `bracketYB`/`jonesYB` (Liquid), `dSquared`/`dSquaredZero` (all three TQFT layers) all witness `j(σ₁σ₂σ₁) == j(σ₂σ₁σ₂)` — identical to `jones lhs == jones rhs` and `equiv("lhs","rhs")`.
 
 This N-way redundancy is intentional: a future Lean/F* backend will unify them as a certified kernel, with NESL/Dataflow as the GPU / streaming execution layer.
 
@@ -82,7 +85,29 @@ Both are drop-in replacements for the Haskell reference when targeting GPU (NESL
 * `KhovanovDifferential.hs` implements the **Frobenius TQFT** `m/delta` `KhovanovDifferential.hs:92` and signed `d` `KhovanovDifferential.hs:210`. `dSquaredZero` `KhovanovDifferential.hs:254` (`d(d ch)==[]`) is exactly the Yang-Baxter coherence (two orders of flipping two `0→1` bits cancel via `signOf`).
 * Together they certify that the NESL/Dataflow rewrites are not just string rewrites but **chain-homotopy equivalences** of Khovanov complexes.
 
-## 7. Future Formalization Path
+## 7. TQFT Cobordism Double-Layer (`TQFT/Cobordism.hs`)
+
+* **Layer 1** Frobenius `A=Z[X]/X²` `TQFT/Cobordism.hs:33` — same `mult`/`comult` as Khovanov but with algebra lemmas `multUnitLeft/Right`, `multAssociative`, `comultCounit` discharged by SMT. This is the *algebraic TQFT*.
+* **Layer 2-3** `Cobordism` ADT `TQFT/Cobordism.hs:82` + `evalCob` `TQFT/Cobordism.hs:113` — the *geometric TQFT functor* on dotted cobordisms (birth/death/merge/split/dot). `Compose` nested evaluation `evalCob f (evalCob g lab)` is functoriality.
+* **Layer 4-5** `KhGen`/`dCob` `TQFT/Cobordism.hs:156` reuses `geometryToCob` + `signOf`; `dSquared` `TQFT/Cobordism.hs:222` re-proves `d²=0` now *via cobordism evaluation* — the YB relation becomes a neck-cutting identity.
+* **Layer 6** `categorification` `TQFT/Cobordism.hs:242` : `{jonesFromEuler (khComplex b)==jonesPoly b}` — second proof of Euler=Jones, now through cobordisms.
+* **Layer 9** `neckCutting/delooping/frobenius` `TQFT/Cobordism.hs:292` — Bar-Natan relations as SMT obligations.
+
+## 8. Bar-Natan Dotted Calculus RAW DOUBLE-DOUBLE (`BarNatan/DottedCobordism.hs`)
+
+* Full **cobordism category**: objects `Circles=Nat` (0 = ∅), morphisms `Cob` `BarNatan/DottedCobordism.hs:40` with `Compose`/`Tensor`/`Sum`/`Scale`, `src/tgt` `BarNatan/DottedCobordism.hs:70`.
+* **BN1-BN6** `BarNatan/DottedCobordism.hs:103` are the defining relations of the category: spheres `S²=0`, `S²·=1`, neck-cutting `Saddle = Death⊗Birth - DotDeath⊗DotBirth`, delooping `Circle≃∅⊕∅[1]`, dot migration = Frobenius. Each stated as `eval ... ==. ... *** QED`.
+* `eval` `BarNatan/DottedCobordism.hs:147` + `Saddle` desugars to neck-cutting; `hcomp/vcomp` `BarNatan/DottedCobordism.hs:201` gives double-category structure (`assocH/V`).
+* `matrixOf` `BarNatan/DottedCobordism.hs:223` — the *universal TQFT* : any cobordism is a matrix over `Z` factoring through `A`. Identities `idLeft/idRight/scaleZero/sumComm/tensorId` `BarNatan/DottedCobordism.hs:270` seal the category laws.
+
+## 9. Pure Functor `F: Cob → Vect_Z` (`TQFT/Functor.hs`)
+
+* `F_obj n = A^{⊗n}` `TQFT/Functor.hs:34`, `F_mor` `TQFT/Functor.hs:40` lifts `eval` to linear combos with `normalise` (collect + sum). `src/tgt` `TQFT/Functor.hs:67`.
+* **Functor laws** `TQFT/Functor.hs:86` : `F_id` (`F(Id)=id`), `F_comp` (`F(f∘g)=F f∘F g`), `F_sum` — pure, SMT-checked.
+* `KhGen/dTQFT/d` `TQFT/Functor.hs:106` rebuilds Khovanov *via the functor*: `dTQFT` picks `Merge/Split` cobordism per `pos` and evaluates it; `homology` `TQFT/Functor.hs:134` = `cycles / boundaries` via `appears`.
+* **Deep homology theorems**: `categorification` (`eulerChar∘homology = eulerChar`), `inducedHom`/`homologyFunctor` `TQFT/Functor.hs:154` (cobordism-induced maps respect composition), `SES`/`connecting` (long exact sequence), `Page`/`turnPage` (spectral sequence skeleton) `TQFT/Functor.hs:173` — the functor unlocks functoriality, LES, and SS for Khovanov.
+
+## 10. Future Formalization Path
 
 * Replace placeholder `ybRewrite` with a proper permutation of `Over/Under` and add `Reidemeister I` (`Tw` normalization).
 * Implement `parseSurface` as a Parsec/Megaparsec recursive descent for the `braid { ... }` syntax; generate both Haskell `Braid` and Datalog `word/2` facts from the same parse.

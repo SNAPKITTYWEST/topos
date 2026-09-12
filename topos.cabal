@@ -13,6 +13,9 @@ description:
   * Dataflow / array-parallel kernel (actor graph + SIMD arrays + streaming Jones)
   * Liquid Haskell Kauffman bracket state-sum + Khovanov homology (reflection/PLE proofs)
   * Khovanov differential TQFT cobordism maps (m/delta, sign, d^2=0)
+  * TQFT Cobordism double-layer (Frobenius A=Z[X]/X^2, Bar-Natan dotted calculus, d^2=0, categorification)
+  * Bar-Natan dotted cobordism RAW DOUBLE-DOUBLE (src/tgt, BN1-BN6, hcomp/vcomp, matrixOf)
+  * TQFT Functor F:Cob->Vect_Z (F_id/F_comp, dTQFT, homology, inducedHom, SES/spectral sequence)
 license:            MIT
 license-file:       LICENSE
 author:             Hilbert Parr / ENKI_PHYSICS_TO_ALGEBRAIC_MAPPING
@@ -28,6 +31,9 @@ extra-doc-files:    README.md
                     dataflow/topos.df
                     src/Topos/KauffmanKhovanov.hs
                     src/Topos/KhovanovDifferential.hs
+                    src/Topos/TQFT/Cobordism.hs
+                    src/Topos/BarNatan/DottedCobordism.hs
+                    src/Topos/TQFT/Functor.hs
                     examples/trefoil.braid
                     examples/poisoning_trace.txt
 
@@ -41,6 +47,9 @@ library
     exposed-modules:  Topos.Core
                     , Topos.KauffmanKhovanov
                     , Topos.KhovanovDifferential
+                    , Topos.TQFT.Cobordism
+                    , Topos.BarNatan.DottedCobordism
+                    , Topos.TQFT.Functor
     hs-source-dirs:   src
     build-depends:    base >= 4.14 && <5
                     , containers >= 0.6
